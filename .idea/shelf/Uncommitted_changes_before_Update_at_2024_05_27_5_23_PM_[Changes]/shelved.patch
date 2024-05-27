@@ -1,0 +1,18 @@
+Index: app/src/main/java/com/example/sportsbuddy/login/LoginScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.sportsbuddy.login\n\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.material3.Text\nimport androidx.compose.runtime.Composable\n\n@Composable\nfun LoginScreen() {\n    \n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/sportsbuddy/login/LoginScreen.kt b/app/src/main/java/com/example/sportsbuddy/login/LoginScreen.kt
+--- a/app/src/main/java/com/example/sportsbuddy/login/LoginScreen.kt	(revision f71b88e944ffa379ecd8b653da777e8807159480)
++++ b/app/src/main/java/com/example/sportsbuddy/login/LoginScreen.kt	(date 1716797988636)
+@@ -6,6 +6,6 @@
+ 
+ @Composable
+ fun LoginScreen() {
+-    
++
+ }
+ 
