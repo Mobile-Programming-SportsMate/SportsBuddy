@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.sportsbuddy.screen.EditProfileScreen
 import com.example.sportsbuddy.screen.HomeScreen
 import com.example.sportsbuddy.ui.theme.SportsBuddyTheme
 
@@ -23,7 +24,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainApp()
+//                    MainApp()
+                    EditProfileScreen()
                 }
             }
         }
