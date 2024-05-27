@@ -74,10 +74,3 @@ fun BottomNavigationBar(navController: NavController) {
     }
 
 }
-
-//라이브러리 추가
-//implementation "androidx.activity:activity-compose:<latest-version>"
-//implementation "androidx.compose.ui:ui:<latest-version>"
-//implementation "androidx.compose.material:material:<latest-version>"
-//implementation "androidx.compose.ui:ui-tooling-preview:<latest-version>"
-//implementation "androidx.navigation:navigation-compose:<latest-version>"
