@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="lime50">#619316</color>
     <color name="theme_blue">#FFD7E7F5</color>
+    <color name="theme_blue02">#E6F2FF</color>
+    <color name="light_gray">#FFD9D9D9</color>
 </resources>
