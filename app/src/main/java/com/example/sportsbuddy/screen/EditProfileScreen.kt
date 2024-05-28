@@ -20,9 +20,11 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,11 +54,28 @@ fun EditProfileScreen() {
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Spacer(modifier = Modifier.height(36.dp))
+        Row(
+            modifier = Modifier
+                .height(48.dp)
+                .padding(start = 18.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(imageVector = Icons.Default.KeyboardArrowLeft, contentDescription = null, modifier = Modifier.align(Alignment.CenterVertically))
+            Text(text = "프로필 변경", fontSize = 18.sp, modifier = Modifier.padding(start = 12.dp))
+        }
+        // 구분선 추가
+        Divider(
+            color = Color.Gray,
+            thickness = 1.dp,
+            modifier = Modifier
+                .fillMaxWidth()
 
-        DrawTextNickNameField()
+        )
+        Spacer(modifier = Modifier.height(37.dp))
 
-        Spacer(modifier = Modifier.height(63.dp))
+        DrawNickNameTextField()
+
+        Spacer(modifier = Modifier.height(37.dp))
 
         DrawSportsCard()
 
@@ -112,7 +131,7 @@ fun CustomTextField(value: String, onValueChange: (String) -> Unit, modifier: Mo
 }
 
 @Composable
-fun DrawTextNickNameField() {
+fun DrawNickNameTextField() {
     Row(
         modifier = Modifier.padding(12.dp),
         verticalAlignment = Alignment.Bottom
@@ -136,7 +155,7 @@ fun DrawTextNickNameField() {
             .fillMaxWidth()
             .padding(start = 37.dp)
             .padding(end = 37.dp)
-            .height(55.dp)
+            .height(55.dp),
     )
 }
 
