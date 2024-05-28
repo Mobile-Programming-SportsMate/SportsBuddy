@@ -1,7 +1,5 @@
 package com.example.sportsbuddy.data
 
-data class Location(val city: String, val district: String, val neighborhood: String)
-
 //val cities = listOf("서울", "부산", "인천")
 //val districts = listOf(
 //    listOf("강남구", "서초구", "송파구"),
