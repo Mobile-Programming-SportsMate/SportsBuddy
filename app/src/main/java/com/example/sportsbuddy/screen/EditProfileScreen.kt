@@ -3,6 +3,7 @@ package com.example.sportsbuddy.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
@@ -33,7 +35,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,11 +53,13 @@ import com.example.sportsbuddy.data.cities
 @Preview
 @Composable
 fun EditProfileScreen() {
+    val focusManager = LocalFocusManager.current
+
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.White).addFocusCleaner(focusManager)
     ) {
         Row(
             modifier = Modifier
@@ -86,44 +93,52 @@ fun EditProfileScreen() {
         Spacer(modifier = Modifier.height(63.dp))
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { /*다시 마이 페이지로 이동, 스택 지우기*/ },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 37.dp)
-                .padding(end = 37.dp)
+                .padding(start = 37.dp, end = 37.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.theme_blue)),
+            shape = RoundedCornerShape(8.dp)
         ) {
             Text(text = "설정 완료")
         }
     }
 }
 
+
+
 @Composable
 fun CustomTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier) {
     var textState by remember { mutableStateOf(TextFieldValue(value)) }
 
-    Box(Modifier.fillMaxWidth()) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
         OutlinedTextField(
             value = textState,
             onValueChange = {
-                if (it.text.length <= 12) { // Check if the length is within 12 characters
+                if (it.text.length <= 12) {
                     textState = it
-                    onValueChange(textState.text)
+                    onValueChange(it.text)
                 }
             },
             modifier = modifier
                 .background(Color.White, shape = RoundedCornerShape(8.dp))
-                .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp)),
+                .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp))
+                .fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 backgroundColor = Color.White,
                 focusedBorderColor = Color.Black,
-                unfocusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.LightGray,
                 cursorColor = Color.Black
             ),
             placeholder = { Text(text = "변경할 닉네임", fontSize = 14.sp) }
         )
         Text(
-            text = "${textState.text.length}/12", modifier = Modifier
+            text = "${textState.text.length}/12",
+            modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(end = 60.dp)
         )
@@ -394,4 +409,13 @@ fun DrawEditLocation() {
         selectedNeighborhood = selectedNeighborhood,
         onNeighborhoodSelected = { selectedNeighborhood = it }
     )
+}
+
+fun Modifier.addFocusCleaner(focusManager: FocusManager, doOnClear: () -> Unit = {}): Modifier {
+    return this.pointerInput(Unit) {
+        detectTapGestures(onTap = {
+            doOnClear()
+            focusManager.clearFocus()
+        })
+    }
 }
