@@ -73,10 +73,8 @@ fun EditProfileScreen() {
                 .padding(start = 37.dp)
                 .padding(end = 37.dp)
         ) {
-
+            Text(text = "설정 완료")
         }
-
-
     }
 }
 
