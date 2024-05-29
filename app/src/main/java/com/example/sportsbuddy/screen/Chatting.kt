@@ -7,6 +7,6 @@ import androidx.compose.runtime.Composable
 @Composable
 fun Chatting() {
     Column {
-        Text(text = "hi")
+        Text(text = "hi22")
     }
 }
