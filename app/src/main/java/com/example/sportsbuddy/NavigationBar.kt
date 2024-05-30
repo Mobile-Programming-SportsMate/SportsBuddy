@@ -54,8 +54,12 @@ fun NavigationBar() {
                 EditProfileScreen(navController)
             }
 
-            composable("add_matching") {
-                AddMatchingScreen(navController)
+            composable("add_individual_matching") {
+                AddMatchingScreen(navController,false)
+            }
+
+            composable("add_team_matching") {
+                AddMatchingScreen(navController,true)
             }
 
         }

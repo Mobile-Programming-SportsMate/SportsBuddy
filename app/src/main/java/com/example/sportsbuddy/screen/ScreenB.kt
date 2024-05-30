@@ -85,7 +85,7 @@ fun ScreenB(navController: NavHostController) {
                     selectedOption = "개인"
                     expanded = false
                     Toast.makeText(context,"개인 메이트 등록",Toast.LENGTH_SHORT).show()
-                    navController.navigate("add_matching")
+                    navController.navigate("add_individual_matching")
                 }
                 ) {
                     Text(
@@ -100,7 +100,7 @@ fun ScreenB(navController: NavHostController) {
                     selectedOption = "팀"
                     expanded = false
                     Toast.makeText(context,"팀 메이트 등록",Toast.LENGTH_SHORT).show()
-                    navController.navigate("add_matching")
+                    navController.navigate("add_team_matching")
 
                 }) {
                     Text(
