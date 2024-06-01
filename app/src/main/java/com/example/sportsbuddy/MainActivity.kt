@@ -12,6 +12,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sportsbuddy.screen.HomeScreen
+import com.example.sportsbuddy.screen.LoginScreen
+import com.example.sportsbuddy.screen.SignUpScreen
 import com.example.sportsbuddy.ui.theme.SportsBuddyTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,6 +37,8 @@ fun MainApp() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = "home_screen") {
         composable("home_screen") { HomeScreen(navController) }
+        composable("login") { LoginScreen(navController) }
+        composable("signup") { SignUpScreen(navController) }
         composable("navigation_bar") { NavigationBar() }
     }
 }
