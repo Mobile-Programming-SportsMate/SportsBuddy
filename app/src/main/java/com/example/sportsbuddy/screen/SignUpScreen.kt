@@ -216,35 +216,35 @@ fun DrawIdTextField() {
     )
 }
 
-@Composable
-fun DrawNickNameTextField() {
-    Row(
-        modifier = Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Spacer(modifier = Modifier.width(14.dp))
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "",
-            tint = Color.DarkGray,
-        )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "닉네임", fontSize = 20.sp)
-        Spacer(modifier = Modifier.width(14.dp))
-        Text(text = "중복확인", fontSize = 14.sp, color = colorResource(id = R.color.lime50))
-    }
-
-    CustomTextField(
-        value = "",
-        onValueChange = {},
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 37.dp)
-            .padding(end = 37.dp)
-            .height(55.dp),
-        showText = "닉네임 입력"
-    )
-}
+//@Composable
+//fun DrawNickNameTextField() {
+//    Row(
+//        modifier = Modifier.padding(12.dp),
+//        verticalAlignment = Alignment.Bottom
+//    ) {
+//        Spacer(modifier = Modifier.width(14.dp))
+//        Icon(
+//            imageVector = Icons.Default.Search,
+//            contentDescription = "",
+//            tint = Color.DarkGray,
+//        )
+//        Spacer(modifier = Modifier.width(5.dp))
+//        Text(text = "닉네임", fontSize = 20.sp)
+//        Spacer(modifier = Modifier.width(14.dp))
+//        Text(text = "중복확인", fontSize = 14.sp, color = colorResource(id = R.color.lime50))
+//    }
+//
+//    CustomTextField(
+//        value = "",
+//        onValueChange = {},
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(start = 37.dp)
+//            .padding(end = 37.dp)
+//            .height(55.dp),
+//        showText = "닉네임 입력"
+//    )
+//}
 
 @Composable
 fun DrawPasswordTextField() {
@@ -363,71 +363,71 @@ fun DrawBirthTextField() {
 
 
 
-@Composable
-fun DrawSportsCard(modifier: Modifier = Modifier) {
-    Row(
-        modifier = Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Spacer(modifier = Modifier.width(14.dp))
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "",
-            tint = Color.DarkGray,
-        )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "관심종목", fontSize = 20.sp)
-    }
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally, // Center the sports cards
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row {
-            SportsCard("헬스")
-            Spacer(modifier = Modifier.width(8.dp))
-            SportsCard("축구")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row {
-            SportsCard("농구")
-            Spacer(modifier = Modifier.width(8.dp))
-            SportsCard("야구")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row {
-            SportsCard("런닝")
-            Spacer(modifier = Modifier.width(8.dp))
-            SportsCard("필라테스")
-        }
-    }
-}
+//@Composable
+//fun DrawSportsCard(modifier: Modifier = Modifier) {
+//    Row(
+//        modifier = Modifier.padding(12.dp),
+//        verticalAlignment = Alignment.Bottom
+//    ) {
+//        Spacer(modifier = Modifier.width(14.dp))
+//        Icon(
+//            imageVector = Icons.Default.Search,
+//            contentDescription = "",
+//            tint = Color.DarkGray,
+//        )
+//        Spacer(modifier = Modifier.width(5.dp))
+//        Text(text = "관심종목", fontSize = 20.sp)
+//    }
+//    Column(
+//        horizontalAlignment = Alignment.CenterHorizontally, // Center the sports cards
+//        modifier = Modifier.fillMaxWidth()
+//    ) {
+//        Row {
+//            SportsCard("헬스")
+//            Spacer(modifier = Modifier.width(8.dp))
+//            SportsCard("축구")
+//        }
+//        Spacer(modifier = Modifier.height(8.dp))
+//        Row {
+//            SportsCard("농구")
+//            Spacer(modifier = Modifier.width(8.dp))
+//            SportsCard("야구")
+//        }
+//        Spacer(modifier = Modifier.height(8.dp))
+//        Row {
+//            SportsCard("런닝")
+//            Spacer(modifier = Modifier.width(8.dp))
+//            SportsCard("필라테스")
+//        }
+//    }
+//}
 
-@Composable
-fun SportsCard(text: String) {
-    var isSelected by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .size(width = 146.dp, height = 45.dp)
-            .border(
-                width = 1.dp,
-                color = if (isSelected) Color.Black else Color.LightGray,
-                shape = RoundedCornerShape(10.dp)
-            )
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(10.dp)
-            )
-            .clickable { isSelected = !isSelected }
-    ) {
-        Text(
-            text = text,
-            fontSize = 16.sp,
-            color = if (isSelected) Color.Black else Color.LightGray,
-            modifier = Modifier.align(Alignment.Center)
-        )
-    }
-}
+//@Composable
+//fun SportsCard(text: String) {
+//    var isSelected by remember { mutableStateOf(false) }
+//
+//    Box(
+//        modifier = Modifier
+//            .size(width = 146.dp, height = 45.dp)
+//            .border(
+//                width = 1.dp,
+//                color = if (isSelected) Color.Black else Color.LightGray,
+//                shape = RoundedCornerShape(10.dp)
+//            )
+//            .background(
+//                color = Color.White,
+//                shape = RoundedCornerShape(10.dp)
+//            )
+//            .clickable { isSelected = !isSelected }
+//    ) {
+//        Text(
+//            text = text,
+//            fontSize = 16.sp,
+//            color = if (isSelected) Color.Black else Color.LightGray,
+//            modifier = Modifier.align(Alignment.Center)
+//        )
+//    }
+//}
 
 @Composable
 fun GenderCard(text: String) {
@@ -455,202 +455,201 @@ fun GenderCard(text: String) {
         )
     }
 }
-@Composable
-fun LocationSpinner(
-    cities: List<City>,
-    selectedCity: City?,
-    onCitySelected: (City) -> Unit,
-    selectedDistrict: District?,
-    onDistrictSelected: (District) -> Unit,
-    selectedNeighborhood: Neighborhood?,
-    onNeighborhoodSelected: (Neighborhood) -> Unit
-) {
-    var isCityDropdownExpanded by remember { mutableStateOf(false) }
-    var isDistrictDropdownExpanded by remember { mutableStateOf(false) }
-    var isNeighborhoodDropdownExpanded by remember { mutableStateOf(false) }
-    val context = LocalContext.current
+//@Composable
+//fun LocationSpinner(
+//    cities: List<City>,
+//    selectedCity: City?,
+//    onCitySelected: (City) -> Unit,
+//    selectedDistrict: District?,
+//    onDistrictSelected: (District) -> Unit,
+//    selectedNeighborhood: Neighborhood?,
+//    onNeighborhoodSelected: (Neighborhood) -> Unit
+//) {
+//    var isCityDropdownExpanded by remember { mutableStateOf(false) }
+//    var isDistrictDropdownExpanded by remember { mutableStateOf(false) }
+//    var isNeighborhoodDropdownExpanded by remember { mutableStateOf(false) }
+//    val context = LocalContext.current
+//
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(start = 37.dp)
+//            .padding(end = 37.dp),
+//        horizontalArrangement = Arrangement.Center
+//    ) {
+//        // 시 선택 드롭다운 메뉴
+//        Column(
+//            modifier = Modifier.weight(1f)
+//        ) {
+//            Box(
+//                modifier = Modifier
+//                    .clickable { isCityDropdownExpanded = !isCityDropdownExpanded }
+//                    .padding(5.dp)
+//                    .border(
+//                        width = 1.dp,
+//                        color = Color.LightGray,
+//                        shape = RoundedCornerShape(10.dp)
+//                    )
+//                    .background(
+//                        color = Color.White,
+//                        shape = RoundedCornerShape(8.dp)
+//                    )
+//                    .fillMaxWidth()
+//                    .height(50.dp)
+//            ) {
+//                Text(selectedCity?.name ?: "'시' 선택", modifier = Modifier.align(Alignment.Center))
+//            }
+//
+//            DropdownMenu(
+//                expanded = isCityDropdownExpanded,
+//                onDismissRequest = { isCityDropdownExpanded = false }
+//            ) {
+//                cities.forEach { city ->
+//                    DropdownMenuItem(onClick = {
+//                        onCitySelected(city)
+//                        isCityDropdownExpanded = false
+//                    }) {
+//                        Text(city.name)
+//                    }
+//                }
+//            }
+//        }
+//
+//        // 구 선택 드롭다운 메뉴
+//        Column(
+//            modifier = Modifier.weight(1f)
+//        ) {
+//            Box(
+//                modifier = Modifier
+//                    .clickable {
+//                        if (selectedCity == null) {
+//                            Toast
+//                                .makeText(context, "'시'를 먼저 선택하세요", Toast.LENGTH_SHORT)
+//                                .show()
+//                        } else {
+//                            isDistrictDropdownExpanded = !isDistrictDropdownExpanded
+//                        }
+//                    }
+//                    .padding(5.dp)
+//                    .border(
+//                        width = 1.dp,
+//                        color = Color.LightGray,
+//                        shape = RoundedCornerShape(10.dp)
+//                    )
+//                    .background(
+//                        color = Color.White,
+//                        shape = RoundedCornerShape(8.dp)
+//                    )
+//                    .fillMaxWidth()
+//                    .height(50.dp)
+//            ) {
+//                Text(selectedDistrict?.name ?: "'구' 선택", modifier = Modifier.align(Alignment.Center))
+//            }
+//
+//            DropdownMenu(
+//                expanded = isDistrictDropdownExpanded,
+//                onDismissRequest = { isDistrictDropdownExpanded = false }
+//            ) {
+//                selectedCity?.districts?.forEach { district ->
+//                    DropdownMenuItem(onClick = {
+//                        onDistrictSelected(district)
+//                        isDistrictDropdownExpanded = false
+//                    }) {
+//                        Text(district.name)
+//                    }
+//                }
+//            }
+//        }
+//
+//        // 동 선택 드롭다운 메뉴
+//        Column(
+//            modifier = Modifier.weight(1f)
+//        ) {
+//            Box(
+//                modifier = Modifier
+//                    .clickable {
+//                        if (selectedDistrict == null) {
+//                            Toast
+//                                .makeText(context, "'구'를 먼저 선택하세요", Toast.LENGTH_SHORT)
+//                                .show()
+//                        } else {
+//                            isNeighborhoodDropdownExpanded = !isNeighborhoodDropdownExpanded
+//                        }
+//                    }
+//                    .padding(5.dp)
+//                    .border(
+//                        width = 1.dp,
+//                        color = Color.LightGray,
+//                        shape = RoundedCornerShape(10.dp)
+//                    )
+//                    .background(
+//                        color = Color.White,
+//                        shape = RoundedCornerShape(8.dp)
+//                    )
+//                    .fillMaxWidth()
+//                    .height(50.dp)
+//            ) {
+//                Text(
+//                    selectedNeighborhood?.name ?: "'동' 선택",
+//                    modifier = Modifier.align(Alignment.Center)
+//                )
+//            }
+//
+//            DropdownMenu(
+//                expanded = isNeighborhoodDropdownExpanded,
+//                onDismissRequest = { isNeighborhoodDropdownExpanded = false }
+//            ) {
+//                selectedDistrict?.neighborhoods?.forEach { neighborhood ->
+//                    DropdownMenuItem(onClick = {
+//                        onNeighborhoodSelected(neighborhood)
+//                        isNeighborhoodDropdownExpanded = false
+//                    }) {
+//                        Text(neighborhood.name)
+//                    }
+//                }
+//            }
+//
+//
+//        }
+//    }
+//}
+//
+//@Composable
+//fun DrawEditLocation() {
+//
+//    Row(
+//        modifier = Modifier.padding(12.dp),
+//        verticalAlignment = Alignment.Bottom
+//    ) {
+//        Spacer(modifier = Modifier.width(14.dp))
+//        Icon(
+//            imageVector = Icons.Default.Search,
+//            contentDescription = "",
+//            tint = Color.DarkGray,
+//        )
+//        Spacer(modifier = Modifier.width(5.dp))
+//        Text(text = "지역설정", fontSize = 20.sp)
+//    }
+//
+//    var selectedCity by remember { mutableStateOf<City?>(null) }
+//    var selectedDistrict by remember { mutableStateOf<District?>(null) }
+//    var selectedNeighborhood by remember { mutableStateOf<Neighborhood?>(null) }
+//
+//    LocationSpinner(
+//        cities = cities,
+//        selectedCity = selectedCity,
+//        onCitySelected = { selectedCity = it },
+//        selectedDistrict = selectedDistrict,
+//        onDistrictSelected = { selectedDistrict = it },
+//        selectedNeighborhood = selectedNeighborhood,
+//        onNeighborhoodSelected = { selectedNeighborhood = it }
+//    )
+//}
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 37.dp)
-            .padding(end = 37.dp),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        // 시 선택 드롭다운 메뉴
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Box(
-                modifier = Modifier
-                    .clickable { isCityDropdownExpanded = !isCityDropdownExpanded }
-                    .padding(5.dp)
-                    .border(
-                        width = 1.dp,
-                        color = Color.LightGray,
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .background(
-                        color = Color.White,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text(selectedCity?.name ?: "'시' 선택", modifier = Modifier.align(Alignment.Center))
-            }
-
-            DropdownMenu(
-                expanded = isCityDropdownExpanded,
-                onDismissRequest = { isCityDropdownExpanded = false }
-            ) {
-                cities.forEach { city ->
-                    DropdownMenuItem(onClick = {
-                        onCitySelected(city)
-                        isCityDropdownExpanded = false
-                    }) {
-                        Text(city.name)
-                    }
-                }
-            }
-        }
-
-        // 구 선택 드롭다운 메뉴
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Box(
-                modifier = Modifier
-                    .clickable {
-                        if (selectedCity == null) {
-                            Toast
-                                .makeText(context, "'시'를 먼저 선택하세요", Toast.LENGTH_SHORT)
-                                .show()
-                        } else {
-                            isDistrictDropdownExpanded = !isDistrictDropdownExpanded
-                        }
-                    }
-                    .padding(5.dp)
-                    .border(
-                        width = 1.dp,
-                        color = Color.LightGray,
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .background(
-                        color = Color.White,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text(selectedDistrict?.name ?: "'구' 선택", modifier = Modifier.align(Alignment.Center))
-            }
-
-            DropdownMenu(
-                expanded = isDistrictDropdownExpanded,
-                onDismissRequest = { isDistrictDropdownExpanded = false }
-            ) {
-                selectedCity?.districts?.forEach { district ->
-                    DropdownMenuItem(onClick = {
-                        onDistrictSelected(district)
-                        isDistrictDropdownExpanded = false
-                    }) {
-                        Text(district.name)
-                    }
-                }
-            }
-        }
-
-        // 동 선택 드롭다운 메뉴
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Box(
-                modifier = Modifier
-                    .clickable {
-                        if (selectedDistrict == null) {
-                            Toast
-                                .makeText(context, "'구'를 먼저 선택하세요", Toast.LENGTH_SHORT)
-                                .show()
-                        } else {
-                            isNeighborhoodDropdownExpanded = !isNeighborhoodDropdownExpanded
-                        }
-                    }
-                    .padding(5.dp)
-                    .border(
-                        width = 1.dp,
-                        color = Color.LightGray,
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .background(
-                        color = Color.White,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text(
-                    selectedNeighborhood?.name ?: "'동' 선택",
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
-            DropdownMenu(
-                expanded = isNeighborhoodDropdownExpanded,
-                onDismissRequest = { isNeighborhoodDropdownExpanded = false }
-            ) {
-                selectedDistrict?.neighborhoods?.forEach { neighborhood ->
-                    DropdownMenuItem(onClick = {
-                        onNeighborhoodSelected(neighborhood)
-                        isNeighborhoodDropdownExpanded = false
-                    }) {
-                        Text(neighborhood.name)
-                    }
-                }
-            }
-
-
-        }
-    }
-}
-
-@Composable
-fun DrawEditLocation() {
-
-    Row(
-        modifier = Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Spacer(modifier = Modifier.width(14.dp))
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "",
-            tint = Color.DarkGray,
-        )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "지역설정", fontSize = 20.sp)
-    }
-
-    var selectedCity by remember { mutableStateOf<City?>(null) }
-    var selectedDistrict by remember { mutableStateOf<District?>(null) }
-    var selectedNeighborhood by remember { mutableStateOf<Neighborhood?>(null) }
-
-    LocationSpinner(
-        cities = cities,
-        selectedCity = selectedCity,
-        onCitySelected = { selectedCity = it },
-        selectedDistrict = selectedDistrict,
-        onDistrictSelected = { selectedDistrict = it },
-        selectedNeighborhood = selectedNeighborhood,
-        onNeighborhoodSelected = { selectedNeighborhood = it }
-    )
-}
-
-fun Modifier.addFocusCleaner(focusManager: FocusManager, doOnClear: () -> Unit = {}): Modifier {
-    return this.pointerInput(Unit) {
-        detectTapGestures(onTap = {
-            doOnClear()
-            focusManager.clearFocus()
-        })
-    }
-}
+//fun Modifier.addFocusCleaner(focusManager: FocusManager, doOnClear: () -> Unit = {}): Modifier {
+//    return this.pointerInput(Unit) {
+//        detectTapGestures(onTap = {
+//            doOnClear()
+//            focusManager.clearFocus()
+//        })
+//    }
