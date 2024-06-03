@@ -17,6 +17,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.sportsbuddy.screen.PersonalMatchDetailScreen
+import com.example.sportsbuddy.screen.ScreenB
+import com.example.sportsbuddy.screen.TeamMatchDetailScreen
+import com.example.sportsbuddy.screen.AddMatchingScreen
+import com.example.sportsbuddy.screen.EditProfileScreen
+import com.example.sportsbuddy.screen.ScreenA
+import com.example.sportsbuddy.screen.ScreenB
+import com.example.sportsbuddy.screen.ScreenC
 
 sealed class Screen(val route: String, val icon: ImageVector, val label: String) {
     object A : Screen("screen_a", Icons.Default.Home, "Screen A")
@@ -32,18 +40,40 @@ fun NavigationBar() {
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) {
-        NavHost(navController = navController, startDestination = Screen.A.route){
-            composable(Screen.A.route){
-                ScreenA()
+        NavHost(navController = navController, startDestination = Screen.B.route) {
+            composable(Screen.A.route) {
+                ScreenA(navController)
             }
 
             composable(Screen.B.route) {
-                ScreenB()
+                ScreenB(navController)
             }
 
-            composable(Screen.C.route){
-                ScreenC()
+            composable(Screen.C.route) {
+                ScreenC(navController)
             }
+
+            composable("edit_profile") {
+                EditProfileScreen(navController)
+            }
+
+            composable("personalMatchDetail") {
+                PersonalMatchDetailScreen(navController)
+            }
+
+            composable("teamMatchDetail") {
+                TeamMatchDetailScreen(navController)
+            }
+
+
+            composable("add_individual_matching") {
+                AddMatchingScreen(navController,false)
+            }
+
+            composable("add_team_matching") {
+                AddMatchingScreen(navController,true)
+            }
+
         }
     }
 }
@@ -63,7 +93,8 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = {
                     navController.navigate(screen.route) {
                         popUpTo(navController.graph.startDestinationId) {
-                            saveState = true
+//                            saveState = true
+                            inclusive = false
                         }
                         launchSingleTop = true
                         restoreState = true
@@ -74,10 +105,3 @@ fun BottomNavigationBar(navController: NavController) {
     }
 
 }
-
-//라이브러리 추가
-//implementation "androidx.activity:activity-compose:<latest-version>"
-//implementation "androidx.compose.ui:ui:<latest-version>"
-//implementation "androidx.compose.material:material:<latest-version>"
-//implementation "androidx.compose.ui:ui-tooling-preview:<latest-version>"
-//implementation "androidx.navigation:navigation-compose:<latest-version>"
