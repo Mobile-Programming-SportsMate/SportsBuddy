@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -23,7 +24,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainApp()
+                    val navController = rememberNavController()
+                    MainApp(navController)
+//                    ScreenB(navController)
                 }
             }
         }
@@ -31,8 +34,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainApp() {
-    val navController = rememberNavController()
+fun MainApp(navController: NavHostController) {
+
     NavHost(navController, startDestination = "home_screen") {
         composable("home_screen") { HomeScreen(navController) }
         composable("navigation_bar") { NavigationBar() }
