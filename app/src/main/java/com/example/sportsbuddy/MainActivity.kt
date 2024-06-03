@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     MainApp(navController)
 //                    ScreenB(navController)
+
                 }
             }
         }

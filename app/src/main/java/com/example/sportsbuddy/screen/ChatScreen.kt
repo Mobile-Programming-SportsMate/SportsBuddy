@@ -38,7 +38,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.pandaways.chatz.model.ChatUiModel
+import com.example.sportsbuddy.model.ChatUiModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
