@@ -17,6 +17,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.sportsbuddy.screen.PersonalMatchDetailScreen
+import com.example.sportsbuddy.screen.ScreenB
+import com.example.sportsbuddy.screen.TeamMatchDetailScreen
 
 sealed class Screen(val route: String, val icon: ImageVector, val label: String) {
     object A : Screen("screen_a", Icons.Default.Home, "Screen A")
@@ -38,12 +41,21 @@ fun NavigationBar() {
             }
 
             composable(Screen.B.route) {
-                ScreenB()
+                ScreenB(navController)
             }
 
             composable(Screen.C.route){
                 ScreenC()
             }
+
+            composable("personalMatchDetail") {
+                PersonalMatchDetailScreen(navController)
+            }
+
+            composable("teamMatchDetail") {
+                TeamMatchDetailScreen(navController)
+            }
+
         }
     }
 }
