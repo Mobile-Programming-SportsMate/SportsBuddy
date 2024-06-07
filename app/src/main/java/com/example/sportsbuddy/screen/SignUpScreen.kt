@@ -42,6 +42,9 @@ fun SignUpScreen(navController: NavController, userViewModel: UserViewModel = vi
     val gender by userViewModel.gender.collectAsState()
     val birthDate by userViewModel.birthDate.collectAsState()
     val selectedInterests by userViewModel.selectedInterests.collectAsState()
+    val selectedCity by userViewModel.selectedCity.collectAsState()
+    val selectedDistrict by userViewModel.selectedDistrict.collectAsState()
+    val selectedNeighborhood by userViewModel.selectedNeighborhood.collectAsState()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
@@ -102,7 +105,7 @@ fun SignUpScreen(navController: NavController, userViewModel: UserViewModel = vi
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawEditLocation2()
+            DrawEditLocation2(userViewModel = userViewModel)
 
             Spacer(modifier = Modifier.height(63.dp))
 
@@ -613,22 +616,33 @@ fun LocationSpinner2(
     }
 }
 
+
 @Composable
-fun DrawEditLocation2() {
-    var selectedCity by remember { mutableStateOf<City?>(null) }
-    var selectedDistrict by remember { mutableStateOf<District?>(null) }
-    var selectedNeighborhood by remember { mutableStateOf<Neighborhood?>(null) }
+fun DrawEditLocation2(userViewModel: UserViewModel) {
+    val selectedCity by userViewModel.selectedCity.collectAsState()
+    val selectedDistrict by userViewModel.selectedDistrict.collectAsState()
+    val selectedNeighborhood by userViewModel.selectedNeighborhood.collectAsState()
 
     LocationSpinner2(
         cities = cities,
-        selectedCity = selectedCity,
-        onCitySelected = { selectedCity = it },
-        selectedDistrict = selectedDistrict,
-        onDistrictSelected = { selectedDistrict = it },
-        selectedNeighborhood = selectedNeighborhood,
-        onNeighborhoodSelected = { selectedNeighborhood = it }
+        selectedCity = cities.find { it.name == selectedCity },
+        onCitySelected = { city ->
+            userViewModel.onCityChange(city.name)
+            userViewModel.onDistrictChange("")
+            userViewModel.onNeighborhoodChange("")
+        },
+        selectedDistrict = cities.find { it.name == selectedCity }?.districts?.find { it.name == selectedDistrict },
+        onDistrictSelected = { district ->
+            userViewModel.onDistrictChange(district.name)
+            userViewModel.onNeighborhoodChange("")
+        },
+        selectedNeighborhood = cities.find { it.name == selectedCity }?.districts?.find { it.name == selectedDistrict }?.neighborhoods?.find { it.name == selectedNeighborhood },
+        onNeighborhoodSelected = { neighborhood ->
+            userViewModel.onNeighborhoodChange(neighborhood.name)
+        }
     )
 }
+
 
 fun Modifier.addFocusCleaner2(focusManager: FocusManager, doOnClear: () -> Unit = {}): Modifier {
     return this.pointerInput(Unit) {
@@ -638,3 +652,4 @@ fun Modifier.addFocusCleaner2(focusManager: FocusManager, doOnClear: () -> Unit 
         })
     }
 }
+

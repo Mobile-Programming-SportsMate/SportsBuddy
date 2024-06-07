@@ -33,6 +33,15 @@ class UserViewModel : ViewModel() {
     private val _selectedInterests = MutableStateFlow(listOf<String>())
     val selectedInterests: StateFlow<List<String>> get() = _selectedInterests
 
+    private val _selectedCity = MutableStateFlow("")
+    val selectedCity: StateFlow<String> get() = _selectedCity
+
+    private val _selectedDistrict = MutableStateFlow("")
+    val selectedDistrict: StateFlow<String> get() = _selectedDistrict
+
+    private val _selectedNeighborhood = MutableStateFlow("")
+    val selectedNeighborhood: StateFlow<String> get() = _selectedNeighborhood
+
     fun onIdChange(newId: String) {
         _id.value = newId
     }
@@ -61,7 +70,24 @@ class UserViewModel : ViewModel() {
         _selectedInterests.value = newInterests
     }
 
+    fun onCityChange(newCity: String) {
+        _selectedCity.value = newCity
+    }
+
+    fun onDistrictChange(newDistrict: String) {
+        _selectedDistrict.value = newDistrict
+    }
+
+    fun onNeighborhoodChange(newNeighborhood: String) {
+        _selectedNeighborhood.value = newNeighborhood
+    }
+
     fun signUp(navController: NavController, context: Context) {
+        if (_password.value != _passwordConfirm.value) {
+            Toast.makeText(context, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val database = FirebaseDatabase.getInstance()
         val usersRef = database.getReference("users").child(_id.value)
 
@@ -71,7 +97,10 @@ class UserViewModel : ViewModel() {
             "password" to _password.value,
             "gender" to _gender.value,
             "birthDate" to _birthDate.value,
-            "selectedInterests" to _selectedInterests.value
+            "selectedInterests" to _selectedInterests.value,
+            "selectedCity" to _selectedCity.value,
+            "selectedDistrict" to _selectedDistrict.value,
+            "selectedNeighborhood" to _selectedNeighborhood.value
         )
 
         usersRef.setValue(userInfo).addOnCompleteListener {
