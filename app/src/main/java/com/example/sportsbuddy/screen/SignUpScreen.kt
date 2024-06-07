@@ -21,6 +21,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,11 +78,11 @@ fun SignUpScreen(navController: NavController, userViewModel: UserViewModel = vi
             )
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawIdTextField(id) { userViewModel.onIdChange(it) }
+            DrawIdTextField(id, { userViewModel.onIdChange(it) }, { userViewModel.checkIdDuplicate(context) })
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawNickNameTextField(nickname) { userViewModel.onNicknameChange(it) }
+            DrawNickNameTextField(nickname, { userViewModel.onNicknameChange(it) }, { userViewModel.checkNicknameDuplicate(context) })
 
             Spacer(modifier = Modifier.height(37.dp))
 
@@ -130,7 +131,8 @@ fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    showText: String
+    showText: String,
+    maxLength: Int = 12
 ) {
     var textState by remember { mutableStateOf(TextFieldValue(value)) }
 
@@ -141,7 +143,7 @@ fun CustomTextField(
         OutlinedTextField(
             value = textState,
             onValueChange = {
-                if (it.text.length <= 12) {
+                if (it.text.length <= maxLength) {
                     textState = it
                     onValueChange(it.text)
                 }
@@ -159,7 +161,7 @@ fun CustomTextField(
             placeholder = { Text(text = showText, fontSize = 14.sp) }
         )
         Text(
-            text = "${textState.text.length}/12",
+            text = "${textState.text.length}/$maxLength",
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(end = 60.dp)
@@ -168,7 +170,7 @@ fun CustomTextField(
 }
 
 @Composable
-fun DrawIdTextField(id: String, onValueChange: (String) -> Unit) {
+fun DrawIdTextField(id: String, onValueChange: (String) -> Unit, onCheckDuplicate: () -> Unit) {
     Row(
         modifier = Modifier.padding(12.dp),
         verticalAlignment = Alignment.Bottom
@@ -182,7 +184,12 @@ fun DrawIdTextField(id: String, onValueChange: (String) -> Unit) {
         Spacer(modifier = Modifier.width(5.dp))
         Text(text = "아이디", fontSize = 20.sp)
         Spacer(modifier = Modifier.width(14.dp))
-        Text(text = "중복확인", fontSize = 14.sp, color = colorResource(id = R.color.lime50))
+        Text(
+            text = "중복확인",
+            fontSize = 14.sp,
+            color = colorResource(id = R.color.lime50),
+            modifier = Modifier.clickable { onCheckDuplicate() }
+        )
     }
 
     CustomTextField(
@@ -198,7 +205,7 @@ fun DrawIdTextField(id: String, onValueChange: (String) -> Unit) {
 }
 
 @Composable
-fun DrawNickNameTextField(nickname: String, onValueChange: (String) -> Unit) {
+fun DrawNickNameTextField(nickname: String, onValueChange: (String) -> Unit, onCheckDuplicate: () -> Unit) {
     Row(
         modifier = Modifier.padding(12.dp),
         verticalAlignment = Alignment.Bottom
@@ -212,7 +219,12 @@ fun DrawNickNameTextField(nickname: String, onValueChange: (String) -> Unit) {
         Spacer(modifier = Modifier.width(5.dp))
         Text(text = "닉네임", fontSize = 20.sp)
         Spacer(modifier = Modifier.width(14.dp))
-        Text(text = "중복확인", fontSize = 14.sp, color = colorResource(id = R.color.lime50))
+        Text(
+            text = "중복확인",
+            fontSize = 14.sp,
+            color = colorResource(id = R.color.lime50),
+            modifier = Modifier.clickable { onCheckDuplicate() }
+        )
     }
 
     CustomTextField(
@@ -243,16 +255,30 @@ fun DrawPasswordTextField(password: String, onValueChange: (String) -> Unit) {
         Text(text = "비밀번호", fontSize = 20.sp)
     }
 
-    CustomTextField(
-        value = password,
-        onValueChange = onValueChange,
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 37.dp)
             .padding(end = 37.dp)
-            .height(55.dp),
-        showText = "비밀번호 입력"
-    )
+            .height(55.dp)
+    ) {
+        OutlinedTextField(
+            value = password,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White, shape = RoundedCornerShape(8.dp)),
+            shape = RoundedCornerShape(8.dp),
+            visualTransformation = PasswordVisualTransformation(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = Color.White,
+                focusedBorderColor = Color.DarkGray,
+                unfocusedBorderColor = Color.LightGray,
+                cursorColor = Color.DarkGray
+            ),
+            placeholder = { Text(text = "비밀번호 입력", fontSize = 14.sp) }
+        )
+    }
 }
 
 @Composable
@@ -271,16 +297,30 @@ fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) 
         Text(text = "비밀번호 확인", fontSize = 20.sp)
     }
 
-    CustomTextField(
-        value = passwordConfirm,
-        onValueChange = onValueChange,
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 37.dp)
             .padding(end = 37.dp)
-            .height(55.dp),
-        showText = "비밀번호 확인"
-    )
+            .height(55.dp)
+    ) {
+        OutlinedTextField(
+            value = passwordConfirm,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White, shape = RoundedCornerShape(8.dp)),
+            shape = RoundedCornerShape(8.dp),
+            visualTransformation = PasswordVisualTransformation(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = Color.White,
+                focusedBorderColor = Color.DarkGray,
+                unfocusedBorderColor = Color.LightGray,
+                cursorColor = Color.DarkGray
+            ),
+            placeholder = { Text(text = "비밀번호 확인", fontSize = 14.sp) }
+        )
+    }
 }
 
 @Composable
@@ -359,7 +399,8 @@ fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit) {
             .padding(start = 37.dp)
             .padding(end = 37.dp)
             .height(55.dp),
-        showText = "생년월일 입력"
+        showText = "생년월일 입력",
+        maxLength = 8
     )
 }
 
@@ -616,7 +657,6 @@ fun LocationSpinner2(
     }
 }
 
-
 @Composable
 fun DrawEditLocation2(userViewModel: UserViewModel) {
     val selectedCity by userViewModel.selectedCity.collectAsState()
@@ -643,7 +683,6 @@ fun DrawEditLocation2(userViewModel: UserViewModel) {
     )
 }
 
-
 fun Modifier.addFocusCleaner2(focusManager: FocusManager, doOnClear: () -> Unit = {}): Modifier {
     return this.pointerInput(Unit) {
         detectTapGestures(onTap = {
@@ -652,4 +691,3 @@ fun Modifier.addFocusCleaner2(focusManager: FocusManager, doOnClear: () -> Unit 
         })
     }
 }
-

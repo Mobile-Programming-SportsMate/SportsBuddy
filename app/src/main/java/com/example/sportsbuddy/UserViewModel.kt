@@ -135,4 +135,43 @@ class UserViewModel : ViewModel() {
             }
         })
     }
+
+    fun checkIdDuplicate(context: Context) {
+        val database = FirebaseDatabase.getInstance()
+        val usersRef = database.getReference("users").child(_id.value)
+
+        usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    Toast.makeText(context, "사용할 수 없는 아이디입니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "사용 가능한 아이디입니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, "중복 확인 실패: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    fun checkNicknameDuplicate(context: Context) {
+        val database = FirebaseDatabase.getInstance()
+        val usersRef = database.getReference("users")
+
+        usersRef.orderByChild("nickname").equalTo(_nickname.value)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        Toast.makeText(context, "사용할 수 없는 닉네임입니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "사용 가능한 닉네임입니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(context, "중복 확인 실패: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
 }
