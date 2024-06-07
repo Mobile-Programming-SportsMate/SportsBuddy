@@ -5,14 +5,39 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -20,7 +45,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -134,6 +161,7 @@ fun CustomTextField(
     showText: String,
     maxLength: Int = 12
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     var textState by remember { mutableStateOf(TextFieldValue(value)) }
 
     Box(
@@ -158,7 +186,13 @@ fun CustomTextField(
                 unfocusedBorderColor = Color.LightGray,
                 cursorColor = Color.DarkGray
             ),
-            placeholder = { Text(text = showText, fontSize = 14.sp) }
+            placeholder = { Text(text = showText, fontSize = 14.sp) },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { keyboardController?.hide() }
+            )
         )
         Text(
             text = "${textState.text.length}/$maxLength",
@@ -255,6 +289,7 @@ fun DrawPasswordTextField(password: String, onValueChange: (String) -> Unit) {
         Text(text = "비밀번호", fontSize = 20.sp)
     }
 
+    val keyboardController = LocalSoftwareKeyboardController.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -276,7 +311,13 @@ fun DrawPasswordTextField(password: String, onValueChange: (String) -> Unit) {
                 unfocusedBorderColor = Color.LightGray,
                 cursorColor = Color.DarkGray
             ),
-            placeholder = { Text(text = "비밀번호 입력", fontSize = 14.sp) }
+            placeholder = { Text(text = "비밀번호 입력", fontSize = 14.sp) },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { keyboardController?.hide() }
+            )
         )
     }
 }
@@ -297,6 +338,7 @@ fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) 
         Text(text = "비밀번호 확인", fontSize = 20.sp)
     }
 
+    val keyboardController = LocalSoftwareKeyboardController.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -318,7 +360,13 @@ fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) 
                 unfocusedBorderColor = Color.LightGray,
                 cursorColor = Color.DarkGray
             ),
-            placeholder = { Text(text = "비밀번호 확인", fontSize = 14.sp) }
+            placeholder = { Text(text = "비밀번호 확인", fontSize = 14.sp) },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { keyboardController?.hide() }
+            )
         )
     }
 }
@@ -377,6 +425,7 @@ fun GenderCard(text: String, isSelected: Boolean, onClick: () -> Unit) {
 
 @Composable
 fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     Row(
         modifier = Modifier.padding(12.dp),
         verticalAlignment = Alignment.Bottom
@@ -662,6 +711,20 @@ fun DrawEditLocation2(userViewModel: UserViewModel) {
     val selectedCity by userViewModel.selectedCity.collectAsState()
     val selectedDistrict by userViewModel.selectedDistrict.collectAsState()
     val selectedNeighborhood by userViewModel.selectedNeighborhood.collectAsState()
+
+    Row(
+        modifier = Modifier.padding(12.dp),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Spacer(modifier = Modifier.width(14.dp))
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = "",
+            tint = Color.DarkGray,
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Text(text = "지역설정", fontSize = 20.sp)
+    }
 
     LocationSpinner2(
         cities = cities,
