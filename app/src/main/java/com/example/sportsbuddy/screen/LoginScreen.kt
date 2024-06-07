@@ -1,5 +1,6 @@
 package com.example.sportsbuddy.screen
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +36,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,14 +46,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sportsbuddy.R
 
-
 @Composable
 fun LoginScreen(navController: NavController) {
+    var id by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
-//    var id by remember { mutableStateOf("") }
-//    var password by remember { mutableStateOf("") }
-
-    val focusRequester = FocusRequester()
+    val idFocusRequester = FocusRequester()
+    val passwordFocusRequester = FocusRequester()
     val context = LocalContext.current
 
     Column(
@@ -64,64 +63,48 @@ fun LoginScreen(navController: NavController) {
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
-        IdInputFieldWithIcon(focusRequester)
+        IdInputFieldWithIcon(id, onValueChange = { id = it }, idFocusRequester, passwordFocusRequester)
 
         Spacer(modifier = Modifier.height(37.dp))
 
-        PasswordInputFieldWithIcon()
+        PasswordInputFieldWithIcon(password, onValueChange = { password = it }, passwordFocusRequester)
 
         Spacer(modifier = Modifier.height(100.dp))
 
-
-        Button(
-            onClick = {
-                navController.popBackStack()
-                Toast.makeText(context, "성공적으로 로그인되었습니다!", Toast.LENGTH_SHORT).show()
-                navController.navigate("navigation_bar")
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 100.dp, end = 100.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.theme_blue)),
-            shape = RoundedCornerShape(15.dp)
-        ) {
-            Text(text = "로그인")
-        }
+        LoginButton(id, password, context, navController)
     }
 }
-
 
 @Composable
-fun IdInputFieldWithIcon(focusRequester: FocusRequester) {
-    val keyboardController = LocalSoftwareKeyboardController.current
+fun IdInputFieldWithIcon(value: String, onValueChange: (String) -> Unit, focusRequester: FocusRequester, nextFocusRequester: FocusRequester) {
+    Column {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Spacer(modifier = Modifier.width(14.dp))
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "",
+                tint = Color.DarkGray,
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(text = "아이디", fontSize = 20.sp)
+        }
 
-    Row(
-        modifier = Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Spacer(modifier = Modifier.width(14.dp))
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "",
-            tint = Color.DarkGray,
+        IdTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 37.dp, end = 37.dp)
+                .height(55.dp),
+            showText = "아이디 입력",
+            focusRequester = focusRequester,
+            nextFocusRequester = nextFocusRequester
         )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "아이디", fontSize = 20.sp)
     }
-
-    IdTextField(
-        value = "",
-        onValueChange = {},
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 37.dp)
-            .padding(end = 37.dp)
-            .height(55.dp),
-        showText = "아이디 입력",
-        focusRequester = focusRequester
-    )
 }
-
 
 @Composable
 fun IdTextField(
@@ -129,7 +112,8 @@ fun IdTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     showText: String,
-    focusRequester: FocusRequester
+    focusRequester: FocusRequester,
+    nextFocusRequester: FocusRequester
 ) {
     var textState by remember { mutableStateOf(TextFieldValue(value)) }
 
@@ -142,7 +126,6 @@ fun IdTextField(
             onValueChange = {
                 textState = it
                 onValueChange(it.text)
-                //textState = it.copy(text = it.text.replace("\n", "")) // 엔터 제거
             },
             modifier = modifier
                 .background(Color.White, shape = RoundedCornerShape(8.dp))
@@ -158,44 +141,44 @@ fun IdTextField(
             placeholder = { Text(text = showText, fontSize = 14.sp) },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    nextFocusRequester.requestFocus()
+                }
             )
         )
     }
 }
 
-
 @Composable
-fun PasswordInputFieldWithIcon() {
-    var password by remember { mutableStateOf("") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = FocusRequester()
+fun PasswordInputFieldWithIcon(value: String, onValueChange: (String) -> Unit, focusRequester: FocusRequester) {
+    Column {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Spacer(modifier = Modifier.width(14.dp))
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "",
+                tint = Color.DarkGray,
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(text = "비밀번호", fontSize = 20.sp)
+        }
 
-    Row(
-        modifier = Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Spacer(modifier = Modifier.width(14.dp))
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "",
-            tint = Color.DarkGray,
+        PasswordTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 37.dp, end = 37.dp)
+                .height(55.dp),
+            showText = "비밀번호 입력",
+            focusRequester = focusRequester
         )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "비밀번호", fontSize = 20.sp)
     }
-
-    PasswordTextField(
-        value = password,
-        onValueChange = { password = it },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 37.dp)
-            .padding(end = 37.dp)
-            .height(55.dp),
-        showText = "비밀번호 입력",
-        keyboardController = keyboardController,
-        focusRequester = focusRequester
-    )
 }
 
 @Composable
@@ -204,9 +187,9 @@ fun PasswordTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     showText: String,
-    keyboardController: SoftwareKeyboardController?,
     focusRequester: FocusRequester
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     var textState by remember { mutableStateOf(TextFieldValue(value)) }
 
     Box(
@@ -218,7 +201,6 @@ fun PasswordTextField(
             onValueChange = {
                 textState = it
                 onValueChange(it.text)
-                //textState = it.copy(text = it.text.replace("\n", "")) // 엔터 제거
             },
             modifier = modifier
                 .background(Color.White, shape = RoundedCornerShape(8.dp))
@@ -243,5 +225,27 @@ fun PasswordTextField(
                 }
             )
         )
+    }
+}
+
+@Composable
+fun LoginButton(id: String, password: String, context: Context, navController: NavController) {
+    Button(
+        onClick = {
+            if (id == "admin" && password == "1234") {
+                navController.popBackStack()
+                Toast.makeText(context, "성공적으로 로그인되었습니다!", Toast.LENGTH_SHORT).show()
+                navController.navigate("navigation_bar")
+            } else {
+                Toast.makeText(context, "아이디 또는 비밀번호가 잘못되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 100.dp, end = 100.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.theme_blue)),
+        shape = RoundedCornerShape(15.dp)
+    ) {
+        Text(text = "로그인")
     }
 }
