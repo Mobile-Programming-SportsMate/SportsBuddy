@@ -3,32 +3,14 @@ package com.example.sportsbuddy.screen
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -43,13 +25,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.sportsbuddy.R
+import com.example.sportsbuddy.UserViewModel
 
 @Composable
-fun LoginScreen(navController: NavController) {
-    var id by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun LoginScreen(navController: NavController, userViewModel: UserViewModel = viewModel()) {
+    val id by userViewModel.id.collectAsState()
+    val password by userViewModel.password.collectAsState()
 
     val idFocusRequester = FocusRequester()
     val passwordFocusRequester = FocusRequester()
@@ -63,15 +47,15 @@ fun LoginScreen(navController: NavController) {
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
-        IdInputFieldWithIcon(id, onValueChange = { id = it }, idFocusRequester, passwordFocusRequester)
+        IdInputFieldWithIcon(id, onValueChange = { userViewModel.onIdChange(it) }, idFocusRequester, passwordFocusRequester)
 
         Spacer(modifier = Modifier.height(37.dp))
 
-        PasswordInputFieldWithIcon(password, onValueChange = { password = it }, passwordFocusRequester)
+        PasswordInputFieldWithIcon(password, onValueChange = { userViewModel.onPasswordChange(it) }, passwordFocusRequester)
 
         Spacer(modifier = Modifier.height(100.dp))
 
-        LoginButton(id, password, context, navController)
+        LoginButton(id, password, context, navController, userViewModel)
     }
 }
 
@@ -229,16 +213,10 @@ fun PasswordTextField(
 }
 
 @Composable
-fun LoginButton(id: String, password: String, context: Context, navController: NavController) {
+fun LoginButton(id: String, password: String, context: Context, navController: NavController, userViewModel: UserViewModel) {
     Button(
         onClick = {
-            if (id == "admin" && password == "1234") {
-                navController.popBackStack()
-                Toast.makeText(context, "성공적으로 로그인되었습니다!", Toast.LENGTH_SHORT).show()
-                navController.navigate("navigation_bar")
-            } else {
-                Toast.makeText(context, "아이디 또는 비밀번호가 잘못되었습니다.", Toast.LENGTH_SHORT).show()
-            }
+            userViewModel.signIn(id, password, context, navController)
         },
         modifier = Modifier
             .fillMaxWidth()
