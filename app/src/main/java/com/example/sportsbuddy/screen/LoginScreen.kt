@@ -43,18 +43,16 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.sportsbuddy.R
 import com.example.sportsbuddy.UserViewModel
 
 @Composable
-fun LoginScreen(navController: NavController, userViewModel: UserViewModel = viewModel()) {
+fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
     val user by userViewModel.user.collectAsState()
-
+    val context = LocalContext.current
     val idFocusRequester = FocusRequester()
     val passwordFocusRequester = FocusRequester()
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -63,15 +61,10 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel = vie
         verticalArrangement = Arrangement.Center,
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-
-        IdInputFieldWithIcon(user.id, onValueChange = { userViewModel.onIdChange(it) }, idFocusRequester, passwordFocusRequester)
-
+        IdInputFieldWithIcon(user.id, { userViewModel.onIdChange(it) }, idFocusRequester, passwordFocusRequester)
         Spacer(modifier = Modifier.height(37.dp))
-
-        PasswordInputFieldWithIcon(user.password, onValueChange = { userViewModel.onPasswordChange(it) }, passwordFocusRequester)
-
+        PasswordInputFieldWithIcon(user.password, { userViewModel.onPasswordChange(it) }, passwordFocusRequester)
         Spacer(modifier = Modifier.height(100.dp))
-
         LoginButton(user.id, user.password, context, navController, userViewModel)
     }
 }
@@ -84,44 +77,22 @@ fun IdInputFieldWithIcon(value: String, onValueChange: (String) -> Unit, focusRe
             verticalAlignment = Alignment.Bottom
         ) {
             Spacer(modifier = Modifier.width(14.dp))
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "",
-                tint = Color.DarkGray,
-            )
+            Icon(imageVector = Icons.Default.Search, contentDescription = "", tint = Color.DarkGray)
             Spacer(modifier = Modifier.width(5.dp))
             Text(text = "아이디", fontSize = 20.sp)
         }
-
-        IdTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 37.dp, end = 37.dp)
-                .height(55.dp),
-            showText = "아이디 입력",
-            focusRequester = focusRequester,
-            nextFocusRequester = nextFocusRequester
-        )
+        IdTextField(value, onValueChange, Modifier
+            .fillMaxWidth()
+            .padding(start = 37.dp, end = 37.dp)
+            .height(55.dp), "아이디 입력", focusRequester, nextFocusRequester)
     }
 }
 
 @Composable
-fun IdTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    showText: String,
-    focusRequester: FocusRequester,
-    nextFocusRequester: FocusRequester
-) {
+fun IdTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifier, showText: String, focusRequester: FocusRequester, nextFocusRequester: FocusRequester) {
     var textState by remember { mutableStateOf(TextFieldValue(value)) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
+    Box(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
             value = textState,
             onValueChange = {
@@ -140,14 +111,8 @@ fun IdTextField(
                 cursorColor = Color.DarkGray
             ),
             placeholder = { Text(text = showText, fontSize = 14.sp) },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    nextFocusRequester.requestFocus()
-                }
-            )
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardActions = KeyboardActions(onNext = { nextFocusRequester.requestFocus() })
         )
     }
 }
@@ -160,43 +125,23 @@ fun PasswordInputFieldWithIcon(value: String, onValueChange: (String) -> Unit, f
             verticalAlignment = Alignment.Bottom
         ) {
             Spacer(modifier = Modifier.width(14.dp))
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "",
-                tint = Color.DarkGray,
-            )
+            Icon(imageVector = Icons.Default.Search, contentDescription = "", tint = Color.DarkGray)
             Spacer(modifier = Modifier.width(5.dp))
             Text(text = "비밀번호", fontSize = 20.sp)
         }
-
-        PasswordTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 37.dp, end = 37.dp)
-                .height(55.dp),
-            showText = "비밀번호 입력",
-            focusRequester = focusRequester
-        )
+        PasswordTextField(value, onValueChange, Modifier
+            .fillMaxWidth()
+            .padding(start = 37.dp, end = 37.dp)
+            .height(55.dp), "비밀번호 입력", focusRequester)
     }
 }
 
 @Composable
-fun PasswordTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    showText: String,
-    focusRequester: FocusRequester
-) {
+fun PasswordTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifier, showText: String, focusRequester: FocusRequester) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var textState by remember { mutableStateOf(TextFieldValue(value)) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
+    Box(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
             value = textState,
             onValueChange = {
@@ -220,11 +165,7 @@ fun PasswordTextField(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    keyboardController?.hide()
-                }
-            )
+            keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() })
         )
     }
 }

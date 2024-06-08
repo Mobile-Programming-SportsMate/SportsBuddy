@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,7 +29,6 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     MainApp(navController)
-//                    ScreenB(navController)
                 }
             }
         }
@@ -37,11 +37,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainApp(navController: NavHostController) {
+    val userViewModel: UserViewModel = viewModel()
 
     NavHost(navController, startDestination = "home_screen") {
         composable("home_screen") { HomeScreen(navController) }
-        composable("login") { LoginScreen(navController) }
-        composable("signup") { SignUpScreen(navController) }
-        composable("navigation_bar") { NavigationBar() }
+        composable("login") { LoginScreen(navController, userViewModel) }
+        composable("signup") { SignUpScreen(navController, userViewModel) }
+        composable("navigation_bar") { NavigationBar(userViewModel) }
     }
 }

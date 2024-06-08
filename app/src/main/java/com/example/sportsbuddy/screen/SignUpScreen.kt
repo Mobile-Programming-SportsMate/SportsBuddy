@@ -52,7 +52,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.sportsbuddy.R
 import com.example.sportsbuddy.UserViewModel
@@ -62,7 +61,7 @@ import com.example.sportsbuddy.data.Neighborhood
 import com.example.sportsbuddy.data.cities
 
 @Composable
-fun SignUpScreen(navController: NavController, userViewModel: UserViewModel = viewModel()) {
+fun SignUpScreen(navController: NavController, userViewModel: UserViewModel) {
     val user by userViewModel.user.collectAsState()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current

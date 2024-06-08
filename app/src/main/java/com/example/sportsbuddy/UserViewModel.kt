@@ -3,6 +3,7 @@ package com.example.sportsbuddy
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.sportsbuddy.data.User
 import com.google.firebase.database.DataSnapshot
@@ -11,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel() {
     private val _user = MutableStateFlow(User())
@@ -84,6 +86,12 @@ class UserViewModel : ViewModel() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val storedPassword = snapshot.child("password").getValue(String::class.java)
                 if (storedPassword == password) {
+                    val user = snapshot.getValue(User::class.java)
+                    user?.let {
+                        viewModelScope.launch {
+                            _user.emit(it)
+                        }
+                    }
                     navController.popBackStack()
                     Toast.makeText(context, "성공적으로 로그인되었습니다!", Toast.LENGTH_SHORT).show()
                     navController.navigate("navigation_bar")
