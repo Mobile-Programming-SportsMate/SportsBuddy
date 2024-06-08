@@ -63,16 +63,7 @@ import com.example.sportsbuddy.data.cities
 
 @Composable
 fun SignUpScreen(navController: NavController, userViewModel: UserViewModel = viewModel()) {
-    val id by userViewModel.id.collectAsState()
-    val nickname by userViewModel.nickname.collectAsState()
-    val password by userViewModel.password.collectAsState()
-    val passwordConfirm by userViewModel.passwordConfirm.collectAsState()
-    val gender by userViewModel.gender.collectAsState()
-    val birthDate by userViewModel.birthDate.collectAsState()
-    val selectedInterests by userViewModel.selectedInterests.collectAsState()
-    val selectedCity by userViewModel.selectedCity.collectAsState()
-    val selectedDistrict by userViewModel.selectedDistrict.collectAsState()
-    val selectedNeighborhood by userViewModel.selectedNeighborhood.collectAsState()
+    val user by userViewModel.user.collectAsState()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
@@ -105,31 +96,31 @@ fun SignUpScreen(navController: NavController, userViewModel: UserViewModel = vi
             )
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawIdTextField(id, { userViewModel.onIdChange(it) }, { userViewModel.checkIdDuplicate(context) })
+            DrawIdTextField(user.id, { userViewModel.onIdChange(it) }, { userViewModel.checkIdDuplicate(context) })
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawNickNameTextField(nickname, { userViewModel.onNicknameChange(it) }, { userViewModel.checkNicknameDuplicate(context) })
+            DrawNickNameTextField(user.nickname, { userViewModel.onNicknameChange(it) }, { userViewModel.checkNicknameDuplicate(context) })
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawPasswordTextField(password) { userViewModel.onPasswordChange(it) }
+            DrawPasswordTextField(user.password) { userViewModel.onPasswordChange(it) }
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawPasswordCheckTextField(passwordConfirm) { userViewModel.onPasswordConfirmChange(it) }
+            DrawPasswordCheckTextField(user.passwordConfirm) { userViewModel.onPasswordConfirmChange(it) }
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawGenderCard(gender) { userViewModel.onGenderChange(it) }
+            DrawGenderCard(user.gender) { userViewModel.onGenderChange(it) }
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawBirthTextField(birthDate) { userViewModel.onBirthDateChange(it) }
+            DrawBirthTextField(user.birthDate) { userViewModel.onBirthDateChange(it) }
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawSportsCard(selectedInterests) { userViewModel.onInterestsChange(it) }
+            DrawSportsCard(user.selectedInterests) { userViewModel.onInterestsChange(it) }
 
             Spacer(modifier = Modifier.height(37.dp))
 
@@ -708,9 +699,7 @@ fun LocationSpinner2(
 
 @Composable
 fun DrawEditLocation2(userViewModel: UserViewModel) {
-    val selectedCity by userViewModel.selectedCity.collectAsState()
-    val selectedDistrict by userViewModel.selectedDistrict.collectAsState()
-    val selectedNeighborhood by userViewModel.selectedNeighborhood.collectAsState()
+    val user by userViewModel.user.collectAsState()
 
     Row(
         modifier = Modifier.padding(12.dp),
@@ -728,18 +717,18 @@ fun DrawEditLocation2(userViewModel: UserViewModel) {
 
     LocationSpinner2(
         cities = cities,
-        selectedCity = cities.find { it.name == selectedCity },
+        selectedCity = cities.find { it.name == user.selectedCity },
         onCitySelected = { city ->
             userViewModel.onCityChange(city.name)
             userViewModel.onDistrictChange("")
             userViewModel.onNeighborhoodChange("")
         },
-        selectedDistrict = cities.find { it.name == selectedCity }?.districts?.find { it.name == selectedDistrict },
+        selectedDistrict = cities.find { it.name == user.selectedCity }?.districts?.find { it.name == user.selectedDistrict },
         onDistrictSelected = { district ->
             userViewModel.onDistrictChange(district.name)
             userViewModel.onNeighborhoodChange("")
         },
-        selectedNeighborhood = cities.find { it.name == selectedCity }?.districts?.find { it.name == selectedDistrict }?.neighborhoods?.find { it.name == selectedNeighborhood },
+        selectedNeighborhood = cities.find { it.name == user.selectedCity }?.districts?.find { it.name == user.selectedDistrict }?.neighborhoods?.find { it.name == user.selectedNeighborhood },
         onNeighborhoodSelected = { neighborhood ->
             userViewModel.onNeighborhoodChange(neighborhood.name)
         }
