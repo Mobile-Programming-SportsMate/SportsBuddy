@@ -138,7 +138,34 @@ fun SignUpScreen(navController: NavController) {
     }
 }
 
+@Composable
+fun DrawNickNameTextField() {
+    Row(
+        modifier = Modifier.padding(12.dp),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Spacer(modifier = Modifier.width(14.dp))
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = "",
+            tint = Color.DarkGray,
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Text(text = "닉네임", fontSize = 20.sp)
+        Spacer(modifier = Modifier.width(14.dp))
+        Text(text = "중복확인", fontSize = 14.sp, color = colorResource(id = R.color.lime50))
+    }
 
+    CustomTextField(
+        value = "",
+        onValueChange = {},
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 37.dp)
+            .padding(end = 37.dp)
+            .height(55.dp),
+    )
+}
 
 @Composable
 fun CustomTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier, showText : String) {
@@ -206,36 +233,6 @@ fun DrawIdTextField() {
         showText = "아이디 입력"
     )
 }
-
-//@Composable
-//fun DrawNickNameTextField() {
-//    Row(
-//        modifier = Modifier.padding(12.dp),
-//        verticalAlignment = Alignment.Bottom
-//    ) {
-//        Spacer(modifier = Modifier.width(14.dp))
-//        Icon(
-//            imageVector = Icons.Default.Search,
-//            contentDescription = "",
-//            tint = Color.DarkGray,
-//        )
-//        Spacer(modifier = Modifier.width(5.dp))
-//        Text(text = "닉네임", fontSize = 20.sp)
-//        Spacer(modifier = Modifier.width(14.dp))
-//        Text(text = "중복확인", fontSize = 14.sp, color = colorResource(id = R.color.lime50))
-//    }
-//
-//    CustomTextField(
-//        value = "",
-//        onValueChange = {},
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(start = 37.dp)
-//            .padding(end = 37.dp)
-//            .height(55.dp),
-//        showText = "닉네임 입력"
-//    )
-//}
 
 @Composable
 fun DrawPasswordTextField() {

@@ -57,6 +57,11 @@ fun EditProfileScreen(navController: NavHostController) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
+    var nickname by remember { mutableStateOf("") }
+    var selectedCity by remember { mutableStateOf<City?>(null) }
+    var selectedDistrict by remember { mutableStateOf<District?>(null) }
+    var selectedNeighborhood by remember { mutableStateOf<Neighborhood?>(null) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -86,7 +91,7 @@ fun EditProfileScreen(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.height(37.dp))
 
-        DrawNickNameTextField()
+        DrawNickNameTextField(nickname) { nickname = it }
 
         Spacer(modifier = Modifier.height(37.dp))
 
@@ -108,16 +113,27 @@ fun EditProfileScreen(navController: NavHostController) {
             Text(text = "지역설정", fontSize = 20.sp)
         }
 
-        DrawEditLocation()
+        LocationSpinner(
+            cities = cities,
+            selectedCity = selectedCity,
+            onCitySelected = { selectedCity = it },
+            selectedDistrict = selectedDistrict,
+            onDistrictSelected = { selectedDistrict = it },
+            selectedNeighborhood = selectedNeighborhood,
+            onNeighborhoodSelected = { selectedNeighborhood = it }
+        )
 
         Spacer(modifier = Modifier.height(63.dp))
 
         Button(
             onClick = {
-                //TODO: 서버로 변경된 프로필 정보 전송
-                navController.popBackStack()
-                Toast.makeText(context,"성공적으로 변경되었습니다!", Toast.LENGTH_SHORT).show()
-
+                if (nickname.isEmpty() || selectedCity == null || selectedDistrict == null || selectedNeighborhood == null) {
+                    Toast.makeText(context, "닉네임과 지역 설정을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                } else {
+                    //TODO: 서버로 변경된 프로필 정보 전송
+                    navController.popBackStack()
+                    Toast.makeText(context, "성공적으로 변경되었습니다!", Toast.LENGTH_SHORT).show()
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -129,7 +145,6 @@ fun EditProfileScreen(navController: NavHostController) {
         }
     }
 }
-
 
 @Composable
 fun CustomTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier) {
@@ -169,7 +184,7 @@ fun CustomTextField(value: String, onValueChange: (String) -> Unit, modifier: Mo
 }
 
 @Composable
-fun DrawNickNameTextField() {
+fun DrawNickNameTextField(value: String, onValueChange: (String) -> Unit) {
     Row(
         modifier = Modifier.padding(12.dp),
         verticalAlignment = Alignment.Bottom
@@ -187,8 +202,8 @@ fun DrawNickNameTextField() {
     }
 
     CustomTextField(
-        value = "",
-        onValueChange = {},
+        value = value,
+        onValueChange = onValueChange,
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 37.dp)
