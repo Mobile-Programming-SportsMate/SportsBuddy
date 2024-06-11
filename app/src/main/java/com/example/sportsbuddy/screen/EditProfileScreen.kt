@@ -112,6 +112,7 @@ fun EditProfileScreen(navController: NavHostController,userViewModel: UserViewMo
 
         Button(
             onClick = {
+                userViewModel.editProfile(navController, context)
                     navController.popBackStack()
                     Toast.makeText(context, "성공적으로 변경되었습니다!", Toast.LENGTH_SHORT).show()
             },
