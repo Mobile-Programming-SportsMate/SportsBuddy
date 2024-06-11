@@ -15,13 +15,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.sportsbuddy.screen.PersonalMatchDetailScreen
-import com.example.sportsbuddy.screen.ScreenB
-import com.example.sportsbuddy.screen.TeamMatchDetailScreen
 import com.example.sportsbuddy.screen.AddMatchingScreen
 import com.example.sportsbuddy.screen.EditProfileScreen
+import com.example.sportsbuddy.screen.PersonalMatchDetailScreen
 import com.example.sportsbuddy.screen.ScreenA
 import com.example.sportsbuddy.screen.ScreenC
+import com.example.sportsbuddy.screen.TeamMatchDetailScreen
 
 sealed class Screen(val route: String, val icon: Int, val label: String) {
     object A : Screen("screen_a", R.drawable.messages, "채팅")
@@ -31,7 +30,7 @@ sealed class Screen(val route: String, val icon: Int, val label: String) {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavigationBar() {
+fun NavigationBar(userViewModel: UserViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
@@ -46,7 +45,7 @@ fun NavigationBar() {
             }
 
             composable(Screen.C.route) {
-                ScreenC(navController)
+                ScreenC(navController, userViewModel)
             }
 
             composable("edit_profile") {
