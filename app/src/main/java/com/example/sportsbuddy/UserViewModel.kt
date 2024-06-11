@@ -1,8 +1,7 @@
 package com.example.sportsbuddy
 
 import android.content.Context
-import android.widget.Toast
-import androidx.lifecycle.ViewModel
+import android.widget.Toast import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.sportsbuddy.data.User

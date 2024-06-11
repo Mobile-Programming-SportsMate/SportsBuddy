@@ -19,6 +19,7 @@ import com.example.sportsbuddy.screen.AddMatchingScreen
 import com.example.sportsbuddy.screen.EditProfileScreen
 import com.example.sportsbuddy.screen.PersonalMatchDetailScreen
 import com.example.sportsbuddy.screen.ScreenA
+import com.example.sportsbuddy.screen.ScreenB
 import com.example.sportsbuddy.screen.ScreenC
 import com.example.sportsbuddy.screen.TeamMatchDetailScreen
 
