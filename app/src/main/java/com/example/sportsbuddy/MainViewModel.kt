@@ -2,7 +2,7 @@ package com.example.sportsbuddy
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pandaways.chatz.model.ChatUiModel
+import com.example.sportsbuddy.model.ChatUiModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

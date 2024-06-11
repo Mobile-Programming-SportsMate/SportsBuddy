@@ -8,6 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +18,7 @@ import com.example.sportsbuddy.screen.HomeScreen
 import com.example.sportsbuddy.screen.LoginScreen
 import com.example.sportsbuddy.screen.SignUpScreen
 import com.example.sportsbuddy.ui.theme.SportsBuddyTheme
+import com.google.firebase.FirebaseApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,11 +40,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainApp(navController: NavHostController) {
+    val userViewModel: UserViewModel = viewModel()
 
     NavHost(navController, startDestination = "home_screen") {
         composable("home_screen") { HomeScreen(navController) }
-        composable("login") { LoginScreen(navController) }
-        composable("signup") { SignUpScreen(navController) }
-        composable("navigation_bar") { NavigationBar() }
+        composable("login") { LoginScreen(navController, userViewModel) }
+        composable("signup") { SignUpScreen(navController, userViewModel) }
+        composable("navigation_bar") { NavigationBar(userViewModel) }
     }
 }
