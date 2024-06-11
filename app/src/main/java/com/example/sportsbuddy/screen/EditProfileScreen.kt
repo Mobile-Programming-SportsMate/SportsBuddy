@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,20 +48,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.sportsbuddy.R
+import com.example.sportsbuddy.UserViewModel
 import com.example.sportsbuddy.data.City
 import com.example.sportsbuddy.data.District
 import com.example.sportsbuddy.data.Neighborhood
+import com.example.sportsbuddy.data.User
 import com.example.sportsbuddy.data.cities
 
 @Composable
-fun EditProfileScreen(navController: NavHostController) {
+fun EditProfileScreen(navController: NavHostController,userViewModel: UserViewModel) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
-    var nickname by remember { mutableStateOf("") }
-    var selectedCity by remember { mutableStateOf<City?>(null) }
-    var selectedDistrict by remember { mutableStateOf<District?>(null) }
-    var selectedNeighborhood by remember { mutableStateOf<Neighborhood?>(null) }
+    val user by userViewModel.user.collectAsState()
 
     Column(
         modifier = Modifier
@@ -91,49 +91,29 @@ fun EditProfileScreen(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.height(37.dp))
 
-        DrawNickNameTextField(nickname) { nickname = it }
+        EditText_NickNameTextField(user.nickname, {
+            if (it != ""){
+                userViewModel.onNicknameChange(it)
+            }
+                                                  }, {
+            userViewModel.checkNicknameDuplicate(context)
+        })
+        Spacer(modifier = Modifier.height(37.dp))
+
+        DrawSportsCard(user.selectedInterests) { userViewModel.onInterestsChange(it) }
 
         Spacer(modifier = Modifier.height(37.dp))
 
-        DrawSportsCard()
 
-        Spacer(modifier = Modifier.height(37.dp))
 
-        Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.Bottom
-        ) {
-            Spacer(modifier = Modifier.width(14.dp))
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "",
-                tint = Color.DarkGray,
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Text(text = "지역설정", fontSize = 20.sp)
-        }
-
-        LocationSpinner(
-            cities = cities,
-            selectedCity = selectedCity,
-            onCitySelected = { selectedCity = it },
-            selectedDistrict = selectedDistrict,
-            onDistrictSelected = { selectedDistrict = it },
-            selectedNeighborhood = selectedNeighborhood,
-            onNeighborhoodSelected = { selectedNeighborhood = it }
-        )
+        DrawEditLocation2(userViewModel = userViewModel)
 
         Spacer(modifier = Modifier.height(63.dp))
 
         Button(
             onClick = {
-                if (nickname.isEmpty() || selectedCity == null || selectedDistrict == null || selectedNeighborhood == null) {
-                    Toast.makeText(context, "닉네임과 지역 설정을 입력해주세요.", Toast.LENGTH_SHORT).show()
-                } else {
-                    //TODO: 서버로 변경된 프로필 정보 전송
                     navController.popBackStack()
                     Toast.makeText(context, "성공적으로 변경되었습니다!", Toast.LENGTH_SHORT).show()
-                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,44 +127,7 @@ fun EditProfileScreen(navController: NavHostController) {
 }
 
 @Composable
-fun CustomTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier) {
-    var textState by remember { mutableStateOf(TextFieldValue(value)) }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        OutlinedTextField(
-            value = textState,
-            onValueChange = {
-                if (it.text.length <= 12) {
-                    textState = it
-                    onValueChange(it.text)
-                }
-            },
-            modifier = modifier
-                .background(Color.White, shape = RoundedCornerShape(8.dp))
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Color.White,
-                focusedBorderColor = Color.DarkGray,
-                unfocusedBorderColor = Color.LightGray,
-                cursorColor = Color.DarkGray
-            ),
-            placeholder = { Text(text = "변경할 닉네임", fontSize = 14.sp) }
-        )
-        Text(
-            text = "${textState.text.length}/12",
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = 60.dp)
-        )
-    }
-}
-
-@Composable
-fun DrawNickNameTextField(value: String, onValueChange: (String) -> Unit) {
+fun EditText_NickNameTextField(nickname: String, onValueChange: (String) -> Unit, onCheckDuplicate: () -> Unit) {
     Row(
         modifier = Modifier.padding(12.dp),
         verticalAlignment = Alignment.Bottom
@@ -198,85 +141,27 @@ fun DrawNickNameTextField(value: String, onValueChange: (String) -> Unit) {
         Spacer(modifier = Modifier.width(5.dp))
         Text(text = "닉네임", fontSize = 20.sp)
         Spacer(modifier = Modifier.width(14.dp))
-        Text(text = "중복확인", fontSize = 14.sp, color = colorResource(id = R.color.lime50))
+        Text(
+            text = "중복확인",
+            fontSize = 14.sp,
+            color = colorResource(id = R.color.lime50),
+            modifier = Modifier.clickable { onCheckDuplicate() }
+        )
     }
 
     CustomTextField(
-        value = value,
+        value = nickname,
         onValueChange = onValueChange,
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 37.dp)
             .padding(end = 37.dp)
             .height(55.dp),
+        showText = nickname
     )
 }
 
-@Composable
-fun DrawSportsCard(modifier: Modifier = Modifier) {
-    Row(
-        modifier = Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Spacer(modifier = Modifier.width(14.dp))
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "",
-            tint = Color.DarkGray,
-        )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "관심종목", fontSize = 20.sp)
-    }
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally, // Center the sports cards
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row {
-            SportsCard("헬스")
-            Spacer(modifier = Modifier.width(8.dp))
-            SportsCard("축구")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row {
-            SportsCard("농구")
-            Spacer(modifier = Modifier.width(8.dp))
-            SportsCard("야구")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row {
-            SportsCard("런닝")
-            Spacer(modifier = Modifier.width(8.dp))
-            SportsCard("필라테스")
-        }
-    }
-}
 
-@Composable
-fun SportsCard(text: String) {
-    var isSelected by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .size(width = 146.dp, height = 45.dp)
-            .border(
-                width = 1.dp,
-                color = if (isSelected) Color.Black else Color.LightGray,
-                shape = RoundedCornerShape(10.dp)
-            )
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(10.dp)
-            )
-            .clickable { isSelected = !isSelected }
-    ) {
-        Text(
-            text = text,
-            fontSize = 16.sp,
-            color = if (isSelected) Color.Black else Color.LightGray,
-            modifier = Modifier.align(Alignment.Center)
-        )
-    }
-}
 
 @Composable
 fun LocationSpinner(

@@ -50,7 +50,7 @@ fun NavigationBar(userViewModel: UserViewModel) {
             }
 
             composable("edit_profile") {
-                EditProfileScreen(navController)
+                EditProfileScreen(navController,userViewModel)
             }
 
             composable("personalMatchDetail") {

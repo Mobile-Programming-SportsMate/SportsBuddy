@@ -12,6 +12,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import android.util.Log
 
 class UserViewModel : ViewModel() {
     private val _user = MutableStateFlow(User())
@@ -77,33 +78,45 @@ class UserViewModel : ViewModel() {
         }
     }
 
+
+
     fun signIn(id: String, password: String, context: Context, navController: NavController) {
         val database = FirebaseDatabase.getInstance()
         val usersRef = database.getReference("users").child(id)
 
+        Log.d("UserViewModel", "Attempting to sign in with id: $id")
+
         usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val storedPassword = snapshot.child("password").getValue(String::class.java)
-                if (storedPassword == password) {
-                    val user = snapshot.getValue(User::class.java)
-                    user?.let {
-                        viewModelScope.launch {
-                            _user.emit(it)
+                Log.d("UserViewModel", "onDataChange called")
+                if (snapshot.exists()) {
+                    val storedPassword = snapshot.child("password").getValue(String::class.java)
+                    Log.d("UserViewModel", "Stored password: $storedPassword")
+                    if (storedPassword == password) {
+                        val user = snapshot.getValue(User::class.java)
+                        user?.let {
+                            viewModelScope.launch {
+                                _user.emit(it)
+                            }
                         }
+                        navController.popBackStack()
+                        Toast.makeText(context, "성공적으로 로그인되었습니다!", Toast.LENGTH_SHORT).show()
+                        navController.navigate("navigation_bar")
+                    } else {
+                        Toast.makeText(context, "아이디 또는 비밀번호가 잘못되었습니다.", Toast.LENGTH_SHORT).show()
                     }
-                    navController.popBackStack()
-                    Toast.makeText(context, "성공적으로 로그인되었습니다!", Toast.LENGTH_SHORT).show()
-                    navController.navigate("navigation_bar")
                 } else {
-                    Toast.makeText(context, "아이디 또는 비밀번호가 잘못되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "해당 아이디가 존재하지 않습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
+                Log.e("UserViewModel", "onCancelled called with error: ${error.message}")
                 Toast.makeText(context, "로그인 실패: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 
     fun checkIdDuplicate(context: Context) {
         val database = FirebaseDatabase.getInstance()
@@ -143,4 +156,5 @@ class UserViewModel : ViewModel() {
                 }
             })
     }
+
 }

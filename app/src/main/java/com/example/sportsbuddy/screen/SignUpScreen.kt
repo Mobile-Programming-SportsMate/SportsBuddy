@@ -445,99 +445,62 @@ fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit) {
 
 @Composable
 fun DrawSportsCard(selectedInterests: List<String>, onValueChange: (List<String>) -> Unit) {
-    Row(
-        modifier = Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Spacer(modifier = Modifier.width(14.dp))
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "",
-            tint = Color.DarkGray,
-        )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "관심종목", fontSize = 20.sp)
-    }
+    val sportsList = listOf("헬스", "축구", "농구", "야구", "런닝", "필라테스")
+
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.padding(12.dp)
     ) {
-        Row {
-            SportsCard("헬스", selectedInterests.contains("헬스")) {
-                if (selectedInterests.contains("헬스")) {
-                    onValueChange(selectedInterests - "헬스")
-                } else {
-                    onValueChange(selectedInterests + "헬스")
-                }
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            SportsCard("축구", selectedInterests.contains("축구")) {
-                if (selectedInterests.contains("축구")) {
-                    onValueChange(selectedInterests - "축구")
-                } else {
-                    onValueChange(selectedInterests + "축구")
-                }
-            }
+        Row(
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Spacer(modifier = Modifier.width(14.dp))
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "",
+                tint = Color.DarkGray,
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(text = "관심종목", fontSize = 20.sp)
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row {
-            SportsCard("농구", selectedInterests.contains("농구")) {
-                if (selectedInterests.contains("농구")) {
-                    onValueChange(selectedInterests - "농구")
-                } else {
-                    onValueChange(selectedInterests + "농구")
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally, // Center the sports cards
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            sportsList.chunked(2).forEach { rowItems ->
+                Row {
+                    rowItems.forEach { sport ->
+                        SportsCard(text = sport, isSelected = sport in selectedInterests)
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
                 }
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            SportsCard("야구", selectedInterests.contains("야구")) {
-                if (selectedInterests.contains("야구")) {
-                    onValueChange(selectedInterests - "야구")
-                } else {
-                    onValueChange(selectedInterests + "야구")
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row {
-            SportsCard("런닝", selectedInterests.contains("런닝")) {
-                if (selectedInterests.contains("런닝")) {
-                    onValueChange(selectedInterests - "런닝")
-                } else {
-                    onValueChange(selectedInterests + "런닝")
-                }
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            SportsCard("볼링", selectedInterests.contains("볼링")) {
-                if (selectedInterests.contains("볼링")) {
-                    onValueChange(selectedInterests - "볼링")
-                } else {
-                    onValueChange(selectedInterests + "볼링")
-                }
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
 }
 
 @Composable
-fun SportsCard(text: String, isSelected: Boolean, onClick: () -> Unit) {
+fun SportsCard(text: String, isSelected: Boolean) {
+    var selected by remember { mutableStateOf(isSelected) }
+
     Box(
         modifier = Modifier
             .size(width = 146.dp, height = 45.dp)
             .border(
                 width = 1.dp,
-                color = if (isSelected) Color.Black else Color.LightGray,
+                color = if (selected) Color.Black else Color.LightGray,
                 shape = RoundedCornerShape(10.dp)
             )
             .background(
                 color = Color.White,
                 shape = RoundedCornerShape(10.dp)
             )
-            .clickable { onClick() }
+            .clickable { selected = !selected }
     ) {
         Text(
             text = text,
             fontSize = 16.sp,
-            color = if (isSelected) Color.Black else Color.LightGray,
+            color = if (selected) Color.Black else Color.LightGray,
             modifier = Modifier.align(Alignment.Center)
         )
     }
