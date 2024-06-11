@@ -445,7 +445,7 @@ fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit) {
 
 @Composable
 fun DrawSportsCard(selectedInterests: List<String>, onValueChange: (List<String>) -> Unit) {
-    val sportsList = listOf("헬스", "축구", "농구", "야구", "런닝", "필라테스")
+    val sportsList = listOf("헬스", "축구", "농구", "야구", "런닝", "볼링")
 
     Column(
         modifier = Modifier.padding(12.dp)
