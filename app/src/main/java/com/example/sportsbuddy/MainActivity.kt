@@ -8,7 +8,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,7 +17,6 @@ import com.example.sportsbuddy.screen.HomeScreen
 import com.example.sportsbuddy.screen.LoginScreen
 import com.example.sportsbuddy.screen.SignUpScreen
 import com.example.sportsbuddy.ui.theme.SportsBuddyTheme
-import com.google.firebase.FirebaseApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
