@@ -46,10 +46,9 @@ import com.example.sportsbuddy.model.ChatUiModel.Author.Companion.manager
 fun ChatScreen(
     model: ChatUiModel,
     onSendChatClickListener: (String) -> Unit,
-    modifier: Modifier,
     interlocutor: String, //'대화상대'라는 뜻
     ) {
-    ConstraintLayout(modifier = modifier.fillMaxSize()) {
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (messages, chatBox, topAppBar) = createRefs()
 
         val listState = rememberLazyListState()
