@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -39,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.sportsbuddy.model.ChatUiModel
+import com.example.sportsbuddy.model.ChatUiModel.Author.Companion.manager
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,10 +46,9 @@ import com.example.sportsbuddy.model.ChatUiModel
 fun ChatScreen(
     model: ChatUiModel,
     onSendChatClickListener: (String) -> Unit,
-    modifier: Modifier,
-    interlocutor: String //'대화상대'라는 뜻
-) {
-    ConstraintLayout(modifier = modifier.fillMaxSize()) {
+    interlocutor: String, //'대화상대'라는 뜻
+    ) {
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (messages, chatBox, topAppBar) = createRefs()
 
         val listState = rememberLazyListState()
@@ -64,12 +63,6 @@ fun ChatScreen(
             }
             ,title = { Text(text = interlocutor) }
         , actions = {
-                IconButton(onClick = {  }) {
-                    Icon(
-                        imageVector = Icons.Filled.Notifications,
-                        contentDescription = "알림/알림 종"
-                    )
-                }
                 IconButton(onClick = {  }) {
                     Icon(
                         imageVector = Icons.Filled.MoreVert,
@@ -100,10 +93,11 @@ fun ChatScreen(
             modifier = Modifier
                 .background(color = Color(0xFFD7E7F5))
                 .fillMaxWidth()
+                .padding(bottom =  40.dp)
                 .constrainAs(chatBox) {
-                    bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
                 }
         )
     }
@@ -129,7 +123,11 @@ fun ChatItem(message: ChatUiModel.Message) {
                 .background(Color.White)
                 .padding(16.dp)
         ) {
-            Text(text = message.text)
+            if(message.author == manager)
+                Text(text = "대화를 시작해보세요!", color = Color.Gray,
+                    )
+            else
+                Text(text = message.text)
         }
     }
 }
@@ -183,4 +181,3 @@ fun ChatBox(
         }
     }
 }
-

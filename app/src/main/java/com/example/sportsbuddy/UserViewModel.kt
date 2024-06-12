@@ -158,4 +158,17 @@ class UserViewModel : ViewModel() {
             })
     }
 
+    fun editProfile(navController: NavController, context: Context) {
+        val database = FirebaseDatabase.getInstance()
+        val usersRef = database.getReference("users").child(_user.value.id)
+
+        usersRef.setValue(_user.value).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Toast.makeText(context, "성공적으로 변경되었습니다!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "정보 변경 실패: ${it.exception?.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }
