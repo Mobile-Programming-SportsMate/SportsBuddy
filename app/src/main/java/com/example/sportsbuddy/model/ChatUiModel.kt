@@ -13,8 +13,8 @@ data class ChatUiModel(
 
         companion object {
             val initConv = Message(
-                text = "안녕하세요!\n헬스 파트너 구인글 보고 연락드렸습니다.",
-                author = Author.bot
+                text = "여기 어차피 출력안되므로 무시. 그러나 코드 없으면 오류",
+                author = Author.manager
             )
         }
     }
@@ -24,6 +24,7 @@ data class ChatUiModel(
         val name: String
     ) {
         companion object {
+            val manager = Author("2", "관리자")
             val bot = Author("1", "김민재")
             val me = Author(MY_ID, "박민규")
         }
