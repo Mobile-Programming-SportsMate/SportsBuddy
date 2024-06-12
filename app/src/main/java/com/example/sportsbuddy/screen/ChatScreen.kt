@@ -37,8 +37,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.pandaways.chatz.model.ChatUiModel
-import com.pandaways.chatz.model.ChatUiModel.Author.Companion.manager
+import com.example.sportsbuddy.model.ChatUiModel
+import com.example.sportsbuddy.model.ChatUiModel.Author.Companion.manager
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,10 +46,9 @@ import com.pandaways.chatz.model.ChatUiModel.Author.Companion.manager
 fun ChatScreen(
     model: ChatUiModel,
     onSendChatClickListener: (String) -> Unit,
-    modifier: Modifier,
     interlocutor: String, //'대화상대'라는 뜻
     ) {
-    ConstraintLayout(modifier = modifier.fillMaxSize()) {
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (messages, chatBox, topAppBar) = createRefs()
 
         val listState = rememberLazyListState()

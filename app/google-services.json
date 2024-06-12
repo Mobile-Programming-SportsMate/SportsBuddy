@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "769672213455",
+    "project_id": "sportbuddy-d586c",
+    "storage_bucket": "sportbuddy-d586c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769672213455:android:7fabc9bdb22ded1f2018ba",
+        "android_client_info": {
+          "package_name": "com.example.sportsbuddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQIl41rOhZf-TNGUnZ2a4wNS_igY7qnG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-package com.pandaways.chatz.model
+package com.example.sportsbuddy.model
 
 data class ChatUiModel(
     val messages: List<Message>,
