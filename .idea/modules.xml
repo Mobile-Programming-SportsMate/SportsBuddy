@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/SportsBuddy.iml" filepath="$PROJECT_DIR$/.idea/SportsBuddy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/SportsBuddy.iml" filepath="$PROJECT_DIR$/.idea/modules/SportsBuddy.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SportsBuddy.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SportsBuddy.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SportsBuddy.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SportsBuddy.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SportsBuddy.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SportsBuddy.app.main.iml" />
