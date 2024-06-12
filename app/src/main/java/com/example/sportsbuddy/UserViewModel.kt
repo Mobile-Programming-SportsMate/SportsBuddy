@@ -1,7 +1,9 @@
 package com.example.sportsbuddy
 
 import android.content.Context
-import android.widget.Toast import androidx.lifecycle.ViewModel
+import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.sportsbuddy.data.User
@@ -12,7 +14,6 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import android.util.Log
 
 class UserViewModel : ViewModel() {
     private val _user = MutableStateFlow(User())
