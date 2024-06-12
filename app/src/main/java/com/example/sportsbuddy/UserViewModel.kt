@@ -59,6 +59,67 @@ class UserViewModel : ViewModel() {
         _user.value = _user.value.copy(selectedNeighborhood = newNeighborhood)
     }
 
+
+    // Functions to update MatchingPost details
+    fun onMatchingPostTitleChange(newTitle: String) {
+        _user.value =
+            _user.value.copy(matchingPost = _user.value.matchingPost.copy(title = newTitle))
+    }
+
+    fun onMatchingPostSportChange(newSport: String) {
+        _user.value =
+            _user.value.copy(matchingPost = _user.value.matchingPost.copy(sport = newSport))
+    }
+
+    fun onMatchingPostCareerChange(newCareer: String) {
+        _user.value =
+            _user.value.copy(matchingPost = _user.value.matchingPost.copy(career = newCareer))
+    }
+    fun onMatchingPostPeopleChange(newPeople: String) {
+        _user.value =
+            _user.value.copy(matchingPost = _user.value.matchingPost.copy(people = newPeople))
+    }
+
+    fun onMatchingPostCityChange(newCity: String) {
+        _user.value =
+            _user.value.copy(matchingPost = _user.value.matchingPost.copy(selectedCity = newCity))
+    }
+
+    fun onMatchingPostDistrictChange(newDistrict: String) {
+        _user.value =
+            _user.value.copy(matchingPost = _user.value.matchingPost.copy(selectedDistrict = newDistrict))
+    }
+
+    fun onMatchingPostNeighborhoodChange(newNeighborhood: String) {
+        _user.value =
+            _user.value.copy(matchingPost = _user.value.matchingPost.copy(selectedNeighborhood = newNeighborhood))
+    }
+
+    fun onMatchingPostTimeChange(newTime: String) {
+        _user.value = _user.value.copy(matchingPost = _user.value.matchingPost.copy(time = newTime))
+    }
+
+    fun onMatchingPostDetailChange(newDetail: String) {
+        _user.value =
+            _user.value.copy(matchingPost = _user.value.matchingPost.copy(detail = newDetail))
+    }
+
+    // Function to add/update matching post
+    fun addMatchingPost(navController: NavController, context: Context) {
+        val database = FirebaseDatabase.getInstance()
+        val usersRef = database.getReference("users").child(_user.value.id).child("matchingPost")
+
+        usersRef.setValue(_user.value.matchingPost).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Toast.makeText(context, "매칭 글이 성공적으로 등록되었습니다!", Toast.LENGTH_SHORT).show()
+                navController.popBackStack()
+            } else {
+                Toast.makeText(context, "매칭 글 등록 실패: ${it.exception?.message}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
     fun signUp(navController: NavController, context: Context) {
         if (_user.value.password != _user.value.passwordConfirm) {
             Toast.makeText(context, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
@@ -74,11 +135,11 @@ class UserViewModel : ViewModel() {
                 Toast.makeText(context, "성공적으로 가입되었습니다!", Toast.LENGTH_SHORT).show()
                 navController.navigate("login")
             } else {
-                Toast.makeText(context, "회원가입 실패: ${it.exception?.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "회원가입 실패: ${it.exception?.message}", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
-
 
 
     fun signIn(id: String, password: String, context: Context, navController: NavController) {
@@ -158,7 +219,7 @@ class UserViewModel : ViewModel() {
             })
     }
 
-    fun editProfile(navController: NavController, context: Context) {
+    fun editProfile(context: Context) {
         val database = FirebaseDatabase.getInstance()
         val usersRef = database.getReference("users").child(_user.value.id)
 
@@ -166,7 +227,8 @@ class UserViewModel : ViewModel() {
             if (it.isSuccessful) {
                 Toast.makeText(context, "성공적으로 변경되었습니다!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(context, "정보 변경 실패: ${it.exception?.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "정보 변경 실패: ${it.exception?.message}", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

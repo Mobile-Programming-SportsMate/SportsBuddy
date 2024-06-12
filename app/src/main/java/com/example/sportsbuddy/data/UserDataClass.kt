@@ -10,5 +10,6 @@ data class User(
     var selectedInterests: List<String> = emptyList(),
     var selectedCity: String = "",
     var selectedDistrict: String = "",
-    var selectedNeighborhood: String = ""
+    var selectedNeighborhood: String = "",
+    var matchingPost: MatchingPost = MatchingPost()
 )

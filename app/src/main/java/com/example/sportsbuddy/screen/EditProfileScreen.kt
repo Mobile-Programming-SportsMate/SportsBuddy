@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -22,10 +21,8 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Search
@@ -43,7 +40,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -52,7 +48,6 @@ import com.example.sportsbuddy.UserViewModel
 import com.example.sportsbuddy.data.City
 import com.example.sportsbuddy.data.District
 import com.example.sportsbuddy.data.Neighborhood
-import com.example.sportsbuddy.data.User
 import com.example.sportsbuddy.data.cities
 
 @Composable
@@ -112,7 +107,7 @@ fun EditProfileScreen(navController: NavHostController,userViewModel: UserViewMo
 
         Button(
             onClick = {
-                userViewModel.editProfile(navController, context)
+                userViewModel.editProfile( context)
                     navController.popBackStack()
                     Toast.makeText(context, "성공적으로 변경되었습니다!", Toast.LENGTH_SHORT).show()
             },

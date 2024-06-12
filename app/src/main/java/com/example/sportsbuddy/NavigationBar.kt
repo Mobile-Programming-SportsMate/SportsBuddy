@@ -91,11 +91,11 @@ fun NavigationBar(
             }
 
             composable("add_individual_matching") {
-                AddMatchingScreen(navController, false)
+                AddMatchingScreen(navController, false,userViewModel)
             }
 
             composable("add_team_matching") {
-                AddMatchingScreen(navController, true)
+                AddMatchingScreen(navController, true,userViewModel)
             }
         }
     }
