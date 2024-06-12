@@ -25,7 +25,6 @@ import com.example.sportsbuddy.Screen
 
 @Composable
 fun ChattingList(navController: NavHostController,
-                 modifier: Modifier,
                  listChatroom: MutableList<List<String>>) {
 
 //    LazyColumn(state = scrollState) {
@@ -53,7 +52,7 @@ fun ChattingList(navController: NavHostController,
             )
             {
                 Row(modifier = Modifier.padding(all = 12.dp) ){
-                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null,modifier = modifier.size(50.dp))
+                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null,modifier = Modifier.size(50.dp))
                     Spacer(modifier = Modifier.size(10.dp))
                     Column {
                         Spacer(modifier = Modifier.size(2.dp))

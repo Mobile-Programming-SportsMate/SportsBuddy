@@ -13,42 +13,70 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.ui.text.font.FontWeight
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PersonalMatchDetailScreen(navController: NavController,
                               listChatroom: MutableList<List<String>>) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("개인 매칭") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Text("⬅️")
-                    }
-                }
-            )
-        }
+    val focusManager = LocalFocusManager.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .addFocusCleaner(focusManager)
     ) {
-        Column(
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
+                .height(56.dp)
+                .padding(horizontal = 18.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            androidx.compose.material.Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = null,
+                tint = Color.DarkGray,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .clickable { navController.popBackStack() }
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            androidx.compose.material.Text(
+                text = "개인 매칭",
+                fontSize = 18.sp,
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+        }
+
+        androidx.compose.material.Divider(
+            color = Color.Gray,
+            thickness = 1.dp,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
@@ -59,22 +87,41 @@ fun PersonalMatchDetailScreen(navController: NavController,
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
-                    Text(text = "제목입니다 제목입니다", fontSize = 20.sp, color = Color.Black)
-                    Text(text = "나는 닉네임", fontSize = 16.sp, color = Color.Gray)
-                    Text(text = "등록일: 2023.02.01", fontSize = 14.sp, color = Color.Gray)
-                    Text(text = "종목: 헬스", fontSize = 14.sp, color = Color.Gray)
-                    Text(text = "운동구력: 3년차", fontSize = 14.sp, color = Color.Gray)
-                    Text(text = "시간대: 평일 밤 10시 이후", fontSize = 14.sp, color = Color.Gray)
+                    Text(
+                        text = "제목입니다 제목입니다",
+                        fontSize = 20.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용", fontSize = 14.sp, color = Color.Gray)
+            Column {
+                Text(text = "닉네임 : 그린조아", fontSize = 14.sp, color = Color.Gray)
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = "등록일 : 2023.02.01", fontSize = 14.sp, color = Color.Gray)
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = "종목 : 헬스", fontSize = 14.sp, color = Color.Gray)
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = "운동구력 : 3년차", fontSize = 14.sp, color = Color.Gray)
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = "시간대 : 평일 밤 10시 이후", fontSize = 14.sp, color = Color.Gray)
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용",
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = { val listA = mutableListOf("김민재","알겠습니다!","2024.06.19")
                     listChatroom.add(listA)
                     navController.navigate("chatScreen") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 100.dp, end = 100.dp),
+                shape = RoundedCornerShape(15.dp)
             ) {
                 Text(text = "채팅하기")
             }
