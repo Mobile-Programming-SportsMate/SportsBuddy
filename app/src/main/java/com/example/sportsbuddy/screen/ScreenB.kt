@@ -72,6 +72,7 @@ fun ScreenB(navController: NavController,) {
                 )
             }
         },
+
         floatingActionButton = {
             Box(
                 contentAlignment = Alignment.BottomEnd,
@@ -81,9 +82,11 @@ fun ScreenB(navController: NavController,) {
             ) {
                 FloatingActionButton(
                     onClick = { expanded = true },
+                    backgroundColor = colorResource(id = R.color.light_gray),
+                    shape = RoundedCornerShape(15.dp),
                     modifier = Modifier
                         .size(width = 50.dp, height = 50.dp)
-                        .clip(RoundedCornerShape(8.dp)),
+                        .clip(RoundedCornerShape(15.dp)),
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
@@ -106,8 +109,7 @@ fun ScreenB(navController: NavController,) {
                         expanded = false
                         Toast.makeText(context, "개인 메이트 등록", Toast.LENGTH_SHORT).show()
                         navController.navigate("add_individual_matching")
-                    }
-                    ) {
+                    }) {
                         Text(
                             text = "개인",
                             modifier = Modifier.padding(8.dp),
@@ -121,7 +123,6 @@ fun ScreenB(navController: NavController,) {
                         expanded = false
                         Toast.makeText(context, "팀 메이트 등록", Toast.LENGTH_SHORT).show()
                         navController.navigate("add_team_matching")
-
                     }) {
                         Text(
                             text = "팀",
@@ -134,6 +135,7 @@ fun ScreenB(navController: NavController,) {
                 }
             }
         }
+
     ) {
         Column(
             modifier = Modifier
@@ -196,8 +198,8 @@ fun MatchItem(navController: NavController, matchType: String) {
 
     Box(
         modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 4.dp)
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
     ) {
         Card(
             modifier = Modifier
