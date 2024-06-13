@@ -19,6 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.sportsbuddy.Screen
@@ -52,15 +54,16 @@ fun ChattingList(navController: NavHostController,
             )
             {
                 Row(modifier = Modifier.padding(all = 12.dp) ){
-                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null,modifier = Modifier.size(50.dp))
+                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = null,
+                        modifier = Modifier.size(50.dp), tint = Color.Gray)
                     Spacer(modifier = Modifier.size(10.dp))
                     Column {
                         Spacer(modifier = Modifier.size(2.dp))
                         Row(modifier = Modifier
                             .fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(text = "${listChatroom[it][0]}")
-                            Text(text = "${listChatroom[it][2]}")
+                            Text(text = "${listChatroom[it][0]}", color = Color.Gray)
+                            Text(text = "${listChatroom[it][2]}", color = Color.Gray)
                         }
                         Spacer(modifier = Modifier.size(3.dp))
                         Text(text = "${listChatroom[it][1]}")
