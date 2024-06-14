@@ -7,7 +7,6 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.ui/ui-test-android/1.7.0-beta01/ec98d8dbf4ae795292324fa14c21a1bea93e942/ui-test-1.7.0-beta01-samples-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.ui/ui-test-android/1.7.0-beta01/48cf81efcd27ee9d8e577a0e21315d631993cd8a/ui-test-android-1.7.0-beta01-sources.jar!/" />
     </SOURCES>
   </library>

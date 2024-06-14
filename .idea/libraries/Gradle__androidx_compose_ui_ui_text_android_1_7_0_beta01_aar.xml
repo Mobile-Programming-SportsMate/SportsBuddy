@@ -7,7 +7,6 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.ui/ui-text-android/1.7.0-beta01/fa0375c7379ce76002bf7a357c69073b8732a178/ui-text-1.7.0-beta01-samples-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.ui/ui-text-android/1.7.0-beta01/407cfae460ed3cef218fa9c6599b0d5e03d36b4b/ui-text-android-1.7.0-beta01-sources.jar!/" />
     </SOURCES>
   </library>
