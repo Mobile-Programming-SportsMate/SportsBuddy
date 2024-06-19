@@ -111,11 +111,11 @@ fun SignUpScreen(navController: NavController, userViewModel: UserViewModel) {
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawGenderCard(user.gender) { userViewModel.onGenderChange(it) }
+            DrawBirthTextField(user.birthDate) { userViewModel.onBirthDateChange(it) }
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawBirthTextField(user.birthDate) { userViewModel.onBirthDateChange(it) }
+            DrawGenderCard(user.gender) { userViewModel.onGenderChange(it) }
 
             Spacer(modifier = Modifier.height(37.dp))
 
@@ -398,6 +398,38 @@ fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) 
     }
 }
 
+
+@Composable
+fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    Row(
+        modifier = Modifier.padding(12.dp),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Spacer(modifier = Modifier.width(14.dp))
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = "",
+            tint = Color.DarkGray,
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Text(text = "생년월일", fontSize = 20.sp)
+    }
+
+    CustomTextField(
+        value = birthDate,
+        onValueChange = onValueChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 37.dp)
+            .padding(end = 37.dp)
+            .height(55.dp),
+        showText = "숫자 8자리 입력",
+        maxLength = 8
+    )
+}
+
+
 @Composable
 fun DrawGenderCard(gender: String, onValueChange: (String) -> Unit) {
     Row(
@@ -448,36 +480,6 @@ fun GenderCard(text: String, isSelected: Boolean, onClick: () -> Unit) {
             modifier = Modifier.align(Alignment.Center)
         )
     }
-}
-
-@Composable
-fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    Row(
-        modifier = Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Spacer(modifier = Modifier.width(14.dp))
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "",
-            tint = Color.DarkGray,
-        )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "생년월일", fontSize = 20.sp)
-    }
-
-    CustomTextField(
-        value = birthDate,
-        onValueChange = onValueChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 37.dp)
-            .padding(end = 37.dp)
-            .height(55.dp),
-        showText = "숫자 8자리 입력",
-        maxLength = 8
-    )
 }
 
 @Composable
