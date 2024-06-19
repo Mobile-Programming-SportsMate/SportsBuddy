@@ -2,6 +2,7 @@ package com.example.sportsbuddy.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,28 +16,37 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.compose.foundation.clickable
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.ui.text.font.FontWeight
+import com.example.sportsbuddy.UserViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PersonalMatchDetailScreen(navController: NavController,
-                              listChatroom: MutableList<List<String>>) {
+fun PersonalMatchDetailScreen(
+    navController: NavController,
+    listChatroom: MutableList<List<String>>,
+    userViewModel: UserViewModel,
+    title: String,
+    time: String,
+    content: String,
+    sport: String,
+    experience: String
+) {
     val focusManager = LocalFocusManager.current
+    val user by userViewModel.user.collectAsState()
 
     Column(
         modifier = Modifier
@@ -88,7 +98,7 @@ fun PersonalMatchDetailScreen(navController: NavController,
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Text(
-                        text = "제목입니다 제목입니다",
+                        text = title,
                         fontSize = 20.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold
@@ -97,27 +107,27 @@ fun PersonalMatchDetailScreen(navController: NavController,
             }
             Spacer(modifier = Modifier.height(16.dp))
             Column {
-                Text(text = "닉네임 : 그린조아", fontSize = 14.sp, color = Color.Gray)
+                Text(text = user.nickname, fontSize = 14.sp, color = Color.Gray)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = "등록일 : 2023.02.01", fontSize = 14.sp, color = Color.Gray)
+                Text(text = "운동 시간대 : $time", fontSize = 14.sp, color = Color.Gray)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = "종목 : 헬스", fontSize = 14.sp, color = Color.Gray)
+                Text(text = "종목 : $sport", fontSize = 14.sp, color = Color.Gray)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = "운동구력 : 3년차", fontSize = 14.sp, color = Color.Gray)
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(text = "시간대 : 평일 밤 10시 이후", fontSize = 14.sp, color = Color.Gray)
+                Text(text = "운동구력 : $experience", fontSize = 14.sp, color = Color.Gray)
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용",
+                text = content,
                 fontSize = 14.sp,
                 color = Color.Gray
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { val listA = mutableListOf("김민재","알겠습니다!","2024.06.19")
+                onClick = {
+                    val listA = mutableListOf("김민재","알겠습니다!","2024.06.19")
                     listChatroom.add(listA)
-                    navController.navigate("chatScreen") },
+                    navController.navigate("chatScreen")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 100.dp, end = 100.dp),

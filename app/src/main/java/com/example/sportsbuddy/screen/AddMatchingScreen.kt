@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,13 +35,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.sportsbuddy.UserViewModel
+import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 
 
 @Composable
-fun AddMatchingScreen(navController: NavHostController, isTeamMatching: Boolean) {
+fun AddMatchingScreen(navController: NavHostController, isTeamMatching: Boolean, userViewModel: UserViewModel) {
     var title by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
+    var sport by remember { mutableStateOf("") }
+    var experience by remember { mutableStateOf("") }
+
     val focusManager = LocalFocusManager.current
 
     var selectedRecruitNumberItem by remember {
@@ -52,7 +62,8 @@ fun AddMatchingScreen(navController: NavHostController, isTeamMatching: Boolean)
 
     var expandedRecruit by remember { mutableStateOf(false) }
 
-
+    val user by userViewModel.user.collectAsState()
+    val nickname = user.nickname
 
     Column(
         modifier = Modifier
@@ -77,7 +88,18 @@ fun AddMatchingScreen(navController: NavHostController, isTeamMatching: Boolean)
             Spacer(modifier = Modifier.weight(1f))
             Text(text = "매치 글 작성", fontSize = 18.sp, modifier = Modifier.padding(start = 12.dp))
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = "저장")
+            Text(
+                text = "저장",
+                modifier = Modifier.clickable {
+                    val currentTime = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(Date())
+                    val matchData = MatchData(
+                        nickname, title, time, content, currentTime, sport, experience,
+                        if (isTeamMatching) "team" else "personal"
+                    )
+                    saveMatchData(matchData)
+                    navController.popBackStack()
+                }
+            )
         }
 
         Divider(
@@ -120,8 +142,9 @@ fun AddMatchingScreen(navController: NavHostController, isTeamMatching: Boolean)
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        DrawSportsDropdown()
+//        DrawSportsDropdown()
 
+        DrawSportsDropdown(selectedSport = { sport = it }, selectedExperience = { experience = it })
 
         Spacer(modifier = Modifier.height(20.dp))
         Divider(
@@ -259,7 +282,7 @@ fun AddMatchingScreen(navController: NavHostController, isTeamMatching: Boolean)
 }
 
 @Composable
-fun DrawSportsDropdown() {
+fun DrawSportsDropdown(selectedSport: (String) -> Unit, selectedExperience: (String) -> Unit) {
     var selectedSportsMenuItem by remember {
         mutableStateOf<String?>(null)
     }
@@ -307,6 +330,7 @@ fun DrawSportsDropdown() {
                     DropdownMenuItem(onClick = {
                         selectedSportsMenuItem = item
                         expandedSports = false
+                        selectedSport(item)
                     }) {
                         Text(text = item)
                     }
@@ -345,6 +369,7 @@ fun DrawSportsDropdown() {
                     DropdownMenuItem(onClick = {
                         selectedExperienceMenuItem = item
                         expandedExperience = false
+                        selectedExperience(item)
                     }) {
                         Text(text = item)
                     }
@@ -353,3 +378,21 @@ fun DrawSportsDropdown() {
         }
     }
 }
+
+private fun saveMatchData(matchData: MatchData) {
+    val database = FirebaseDatabase.getInstance()
+    val matchesRef = database.getReference("matches")
+
+    matchesRef.push().setValue(matchData)
+}
+
+data class MatchData(
+    val nickname: String = "",
+    val title: String = "",
+    val time: String = "",
+    val content: String = "",
+    val current: String = "",
+    val sport: String = "",
+    val experience: String = "",
+    val type: String = ""
+)

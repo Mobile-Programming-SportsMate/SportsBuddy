@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.sportsbuddy.model.ChatUiModel
 import com.example.sportsbuddy.screen.AddMatchingScreen
 import com.example.sportsbuddy.screen.ChatScreen
@@ -82,20 +83,60 @@ fun NavigationBar(
                 EditProfileScreen(navController, userViewModel)
             }
 
-            composable("personalMatchDetail") {
-                PersonalMatchDetailScreen(navController, listChatroom)
+//            composable("personalMatchDetail") {
+//                PersonalMatchDetailScreen(navController, listChatroom)
+//            }
+
+            composable("personalMatchDetail/{title}/{time}/{content}/{sport}/{experience}",
+                arguments = listOf(
+                    navArgument("title") { defaultValue = "" },
+                    navArgument("time") { defaultValue = "" },
+                    navArgument("content") { defaultValue = "" },
+                    navArgument("sport") { defaultValue = "" },
+                    navArgument("experience") { defaultValue = "" },
+                )) { backStackEntry ->
+                PersonalMatchDetailScreen(
+                    navController,
+                    listChatroom,
+                    userViewModel,
+                    backStackEntry.arguments?.getString("title") ?: "",
+                    backStackEntry.arguments?.getString("time") ?: "",
+                    backStackEntry.arguments?.getString("content") ?: "",
+                    backStackEntry.arguments?.getString("sport") ?: "",
+                    backStackEntry.arguments?.getString("experience") ?: ""
+                )
             }
 
-            composable("teamMatchDetail") {
-                TeamMatchDetailScreen(navController,listChatroom)
+//            composable("teamMatchDetail") {
+//                TeamMatchDetailScreen(navController,listChatroom)
+//            }
+
+            composable("teamMatchDetail/{title}/{time}/{content}/{sport}/{experience}",
+                arguments = listOf(
+                    navArgument("title") { defaultValue = "" },
+                    navArgument("time") { defaultValue = "" },
+                    navArgument("content") { defaultValue = "" },
+                    navArgument("sport") { defaultValue = "" },
+                    navArgument("experience") { defaultValue = "" },
+                )) { backStackEntry ->
+                TeamMatchDetailScreen(
+                    navController,
+                    listChatroom,
+                    userViewModel,
+                    backStackEntry.arguments?.getString("title") ?: "",
+                    backStackEntry.arguments?.getString("time") ?: "",
+                    backStackEntry.arguments?.getString("content") ?: "",
+                    backStackEntry.arguments?.getString("sport") ?: "",
+                    backStackEntry.arguments?.getString("experience") ?: ""
+                )
             }
 
             composable("add_individual_matching") {
-                AddMatchingScreen(navController, false)
+                AddMatchingScreen(navController, false, userViewModel)
             }
 
             composable("add_team_matching") {
-                AddMatchingScreen(navController, true)
+                AddMatchingScreen(navController, true, userViewModel)
             }
         }
     }
