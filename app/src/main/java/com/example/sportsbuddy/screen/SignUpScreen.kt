@@ -161,9 +161,18 @@ fun CustomTextField(
         OutlinedTextField(
             value = textState,
             onValueChange = {
-                if (it.text.length <= maxLength) {
-                    textState = it
-                    onValueChange(it.text)
+                if (it.text.contains('\t')) {
+                    keyboardController?.hide()
+                }
+                if ( it.text.contains('\n')) {
+                    keyboardController?.hide()
+                } else {
+                    if (it.text.length <= maxLength) {
+                        val newText =
+                            it.text.filter { char -> char != ' ' && char != '\t' && char != '\n' }
+                        textState = it.copy(text = newText)
+                        onValueChange(newText)
+                    }
                 }
             },
             modifier = modifier
@@ -265,6 +274,7 @@ fun DrawNickNameTextField(nickname: String, onValueChange: (String) -> Unit, onC
 
 @Composable
 fun DrawPasswordTextField(password: String, onValueChange: (String) -> Unit) {
+    val maxLength = 15
     Row(
         modifier = Modifier.padding(12.dp),
         verticalAlignment = Alignment.Bottom
@@ -289,7 +299,20 @@ fun DrawPasswordTextField(password: String, onValueChange: (String) -> Unit) {
     ) {
         OutlinedTextField(
             value = password,
-            onValueChange = onValueChange,
+            onValueChange = {
+                if (it.contains('\t')) {
+                    keyboardController?.hide()
+                }
+                if ( it.contains('\n')) {
+                    keyboardController?.hide()
+                } else {
+                    if (it.length <= maxLength) {
+                        val newText =
+                            it.filter { char -> char != ' ' && char != '\t' && char != '\n' }
+                        onValueChange(newText)
+                    }
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White, shape = RoundedCornerShape(8.dp)),
@@ -314,6 +337,7 @@ fun DrawPasswordTextField(password: String, onValueChange: (String) -> Unit) {
 
 @Composable
 fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) -> Unit) {
+    val maxLength = 15
     Row(
         modifier = Modifier.padding(12.dp),
         verticalAlignment = Alignment.Bottom
@@ -338,7 +362,20 @@ fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) 
     ) {
         OutlinedTextField(
             value = passwordConfirm,
-            onValueChange = onValueChange,
+            onValueChange = {
+                if (it.contains('\t')) {
+                    keyboardController?.hide()
+                }
+                if ( it.contains('\n')) {
+                    keyboardController?.hide()
+                } else {
+                    if (it.length <= maxLength) {
+                        val newText =
+                            it.filter { char -> char != ' ' && char != '\t' && char != '\n' }
+                        onValueChange(newText)
+                    }
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White, shape = RoundedCornerShape(8.dp)),
@@ -733,7 +770,6 @@ fun DrawEditLocation2(userViewModel: UserViewModel) {
         }
     )
 }
-
 fun Modifier.addFocusCleaner2(focusManager: FocusManager, doOnClear: () -> Unit = {}): Modifier {
     return this.pointerInput(Unit) {
         detectTapGestures(onTap = {
