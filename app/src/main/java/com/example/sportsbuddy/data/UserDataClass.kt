@@ -10,5 +10,7 @@ data class User(
     var selectedInterests: List<String> = emptyList(),
     var selectedCity: String = "",
     var selectedDistrict: String = "",
-    var selectedNeighborhood: String = ""
+    var selectedNeighborhood: String = "",
+    var idChecked: Boolean = false,  //ID duplicate check
+    var nicknameChecked: Boolean = false  // Nickname duplicate check
 )

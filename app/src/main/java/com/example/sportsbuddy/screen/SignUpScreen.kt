@@ -438,7 +438,7 @@ fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit) {
             .padding(start = 37.dp)
             .padding(end = 37.dp)
             .height(55.dp),
-        showText = "생년월일 입력",
+        showText = "숫자 8자리 입력",
         maxLength = 8
     )
 }

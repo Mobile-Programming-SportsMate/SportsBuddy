@@ -96,8 +96,13 @@ fun IdTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifi
         OutlinedTextField(
             value = textState,
             onValueChange = {
-                textState = it
-                onValueChange(it.text)
+                if (it.text.contains('\t') || it.text.contains('\n')) {
+                    nextFocusRequester.requestFocus()
+                } else {
+                    val newText = it.text.filter { char -> char != ' ' && char != '\t' && char != '\n' }
+                    textState = it.copy(text = newText)
+                    onValueChange(newText)
+                }
             },
             modifier = modifier
                 .background(Color.White, shape = RoundedCornerShape(8.dp))
@@ -116,6 +121,8 @@ fun IdTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifi
         )
     }
 }
+
+
 
 @Composable
 fun PasswordInputFieldWithIcon(value: String, onValueChange: (String) -> Unit, focusRequester: FocusRequester) {
@@ -145,8 +152,13 @@ fun PasswordTextField(value: String, onValueChange: (String) -> Unit, modifier: 
         OutlinedTextField(
             value = textState,
             onValueChange = {
-                textState = it
-                onValueChange(it.text)
+                if (it.text.contains('\n')) {
+                    keyboardController?.hide()
+                } else {
+                    val newText = it.text.filter { char -> char != ' ' && char != '\t' && char != '\n' }
+                    textState = it.copy(text = newText)
+                    onValueChange(newText)
+                }
             },
             modifier = modifier
                 .background(Color.White, shape = RoundedCornerShape(8.dp))
