@@ -121,48 +121,9 @@ class UserViewModel : ViewModel() {
     }
 
     fun signUp(navController: NavController, context: Context) {
-
-        with(_user.value) {
-            if (id.isBlank()) {
-                Toast.makeText(context, "아이디를 입력해주세요.", Toast.LENGTH_SHORT).show()
-                return
-            }
-            if (!idChecked) {
-                Toast.makeText(context, "아이디 중복 확인을 해주세요.", Toast.LENGTH_SHORT).show()
-                return
-            }
-            if (nickname.isBlank()) {
-                Toast.makeText(context, "닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show()
-                return
-            }
-            if (!nicknameChecked) {
-                Toast.makeText(context, "닉네임 중복 확인을 해주세요.", Toast.LENGTH_SHORT).show()
-                return
-            }
-            if (password.isBlank()) {
-                Toast.makeText(context, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
-                return
-            }
-            if (passwordConfirm.isBlank() || password != passwordConfirm) {
-                Toast.makeText(context, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
-                return
-            }
-            if (gender.isBlank()) {
-                Toast.makeText(context, "성별을 선택해주세요.", Toast.LENGTH_SHORT).show()
-                return
-            }
-            if (birthDate.isBlank()) {
-                Toast.makeText(context, "생년월일을 입력해주세요.", Toast.LENGTH_SHORT).show()
-                return
-            }
-            if (selectedInterests.isEmpty()) {
-                Toast.makeText(context, "하나 이상의 관심 종목을 선택해주세요.", Toast.LENGTH_SHORT).show()
-                return
-            }
-            if (selectedCity.isBlank() || selectedDistrict.isBlank() || selectedNeighborhood.isBlank()) {
-                Toast.makeText(context, "지역 설정을 완료해주세요.", Toast.LENGTH_SHORT).show()
-                return
-            }
+        if (_user.value.password != _user.value.passwordConfirm) {
+            Toast.makeText(context, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
+            return
         }
 
         val database = FirebaseDatabase.getInstance()
@@ -229,7 +190,6 @@ class UserViewModel : ViewModel() {
                     Toast.makeText(context, "사용할 수 없는 아이디입니다.", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(context, "사용 가능한 아이디입니다.", Toast.LENGTH_SHORT).show()
-                    _user.value = _user.value.copy(idChecked = true)
                 }
             }
 
@@ -241,22 +201,22 @@ class UserViewModel : ViewModel() {
 
     fun checkNicknameDuplicate(context: Context) {
         val database = FirebaseDatabase.getInstance()
-        val usersRef = database.getReference("users").child(_user.value.nickname)
+        val usersRef = database.getReference("users")
 
-        usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    Toast.makeText(context, "사용할 수 없는 닉네임입니다.", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "사용 가능한 닉네임입니다.", Toast.LENGTH_SHORT).show()
-                    _user.value = _user.value.copy(nicknameChecked = true)
+        usersRef.orderByChild("nickname").equalTo(_user.value.nickname)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        Toast.makeText(context, "사용할 수 없는 닉네임입니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "사용 가능한 닉네임입니다.", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, "중복 확인 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(context, "중복 확인 실패: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     fun editProfile(context: Context) {
