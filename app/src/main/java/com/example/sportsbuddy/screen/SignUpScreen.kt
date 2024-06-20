@@ -41,6 +41,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -66,6 +68,13 @@ fun SignUpScreen(navController: NavController, userViewModel: UserViewModel) {
     val user by userViewModel.user.collectAsState()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
+
+    // FocusRequesters for managing focus between fields
+    val idFocusRequester = remember { FocusRequester() }
+    val nicknameFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
+    val passwordConfirmFocusRequester = remember { FocusRequester() }
+    val birthDateFocusRequester = remember { FocusRequester() }
 
     LazyColumn(
         modifier = Modifier
@@ -96,23 +105,23 @@ fun SignUpScreen(navController: NavController, userViewModel: UserViewModel) {
             )
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawIdTextField(user.id, { userViewModel.onIdChange(it) }, { userViewModel.checkIdDuplicate(context) })
+            DrawIdTextField(user.id, { userViewModel.onIdChange(it) }, { userViewModel.checkIdDuplicate(context) }, focusRequester = idFocusRequester, nextFocusRequester = nicknameFocusRequester)
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawNickNameTextField(user.nickname, { userViewModel.onNicknameChange(it) }, { userViewModel.checkNicknameDuplicate(context) })
+            DrawNickNameTextField(user.nickname, { userViewModel.onNicknameChange(it) }, { userViewModel.checkNicknameDuplicate(context) }, focusRequester = nicknameFocusRequester, nextFocusRequester = passwordFocusRequester)
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawPasswordTextField(user.password) { userViewModel.onPasswordChange(it) }
+            DrawPasswordTextField(user.password, { userViewModel.onPasswordChange(it) }, focusRequester = passwordFocusRequester, nextFocusRequester = passwordConfirmFocusRequester)
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawPasswordCheckTextField(user.passwordConfirm) { userViewModel.onPasswordConfirmChange(it) }
+            DrawPasswordCheckTextField(user.passwordConfirm, { userViewModel.onPasswordConfirmChange(it) }, focusRequester = passwordConfirmFocusRequester, nextFocusRequester = birthDateFocusRequester)
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawBirthTextField(user.birthDate) { userViewModel.onBirthDateChange(it) }
+            DrawBirthTextField(user.birthDate, { userViewModel.onBirthDateChange(it) }, focusRequester = birthDateFocusRequester)
 
             Spacer(modifier = Modifier.height(37.dp))
 
@@ -140,6 +149,8 @@ fun SignUpScreen(navController: NavController, userViewModel: UserViewModel) {
             ) {
                 Text(text = "회원가입")
             }
+
+            Spacer(modifier = Modifier.height(63.dp))
         }
     }
 }
@@ -147,7 +158,7 @@ fun SignUpScreen(navController: NavController, userViewModel: UserViewModel) {
 
 
 @Composable
-fun DrawIdTextField(id: String, onValueChange: (String) -> Unit, onCheckDuplicate: () -> Unit) {
+fun DrawIdTextField(id: String, onValueChange: (String) -> Unit, onCheckDuplicate: () -> Unit, focusRequester: FocusRequester, nextFocusRequester: FocusRequester) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var textState by remember { mutableStateOf(TextFieldValue(id)) }
     val maxLength = 12
@@ -184,10 +195,11 @@ fun DrawIdTextField(id: String, onValueChange: (String) -> Unit, onCheckDuplicat
                 value = textState,
                 onValueChange = {
                     if (it.text.contains('\t')) {
-                        keyboardController?.hide()
+                        nextFocusRequester.requestFocus()
                     }
                     if (it.text.contains('\n')) {
                         keyboardController?.hide()
+                        nextFocusRequester.requestFocus()
                     } else {
                         if (it.text.length <= maxLength) {
                             val newText =
@@ -199,7 +211,8 @@ fun DrawIdTextField(id: String, onValueChange: (String) -> Unit, onCheckDuplicat
                 },
                 modifier = Modifier
                     .background(Color.White, shape = RoundedCornerShape(8.dp))
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
                 shape = RoundedCornerShape(8.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     backgroundColor = Color.White,
@@ -209,10 +222,10 @@ fun DrawIdTextField(id: String, onValueChange: (String) -> Unit, onCheckDuplicat
                 ),
                 placeholder = { Text(text = "아이디 입력", fontSize = 14.sp) },
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Next
                 ),
                 keyboardActions = KeyboardActions(
-                    onDone = { keyboardController?.hide() }
+                    onNext = { nextFocusRequester.requestFocus() }
                 )
             )
             Text(
@@ -227,7 +240,7 @@ fun DrawIdTextField(id: String, onValueChange: (String) -> Unit, onCheckDuplicat
 
 
 @Composable
-fun DrawNickNameTextField(nickname: String, onValueChange: (String) -> Unit, onCheckDuplicate: () -> Unit) {
+fun DrawNickNameTextField(nickname: String, onValueChange: (String) -> Unit, onCheckDuplicate: () -> Unit, focusRequester: FocusRequester, nextFocusRequester: FocusRequester) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var textState by remember { mutableStateOf(TextFieldValue(nickname)) }
     val maxLength = 12
@@ -264,10 +277,11 @@ fun DrawNickNameTextField(nickname: String, onValueChange: (String) -> Unit, onC
                 value = textState,
                 onValueChange = {
                     if (it.text.contains('\t')) {
-                        keyboardController?.hide()
+                        nextFocusRequester.requestFocus()
                     }
                     if (it.text.contains('\n')) {
                         keyboardController?.hide()
+                        nextFocusRequester.requestFocus()
                     } else {
                         if (it.text.length <= maxLength) {
                             val newText =
@@ -279,7 +293,8 @@ fun DrawNickNameTextField(nickname: String, onValueChange: (String) -> Unit, onC
                 },
                 modifier = Modifier
                     .background(Color.White, shape = RoundedCornerShape(8.dp))
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
                 shape = RoundedCornerShape(8.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     backgroundColor = Color.White,
@@ -289,10 +304,10 @@ fun DrawNickNameTextField(nickname: String, onValueChange: (String) -> Unit, onC
                 ),
                 placeholder = { Text(text = "닉네임 입력", fontSize = 14.sp) },
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
+                    imeAction = ImeAction.Next
                 ),
                 keyboardActions = KeyboardActions(
-                    onDone = { keyboardController?.hide() }
+                    onNext = { nextFocusRequester.requestFocus() }
                 )
             )
             Text(
@@ -306,7 +321,7 @@ fun DrawNickNameTextField(nickname: String, onValueChange: (String) -> Unit, onC
 }
 
 @Composable
-fun DrawPasswordTextField(password: String, onValueChange: (String) -> Unit) {
+fun DrawPasswordTextField(password: String, onValueChange: (String) -> Unit, focusRequester: FocusRequester, nextFocusRequester: FocusRequester) {
     val maxLength = 15
     Row(
         modifier = Modifier.padding(12.dp),
@@ -334,10 +349,11 @@ fun DrawPasswordTextField(password: String, onValueChange: (String) -> Unit) {
             value = password,
             onValueChange = {
                 if (it.contains('\t')) {
-                    keyboardController?.hide()
+                    nextFocusRequester.requestFocus()
                 }
                 if ( it.contains('\n')) {
                     keyboardController?.hide()
+                    nextFocusRequester.requestFocus()
                 } else {
                     if (it.length <= maxLength) {
                         val newText =
@@ -348,7 +364,8 @@ fun DrawPasswordTextField(password: String, onValueChange: (String) -> Unit) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, shape = RoundedCornerShape(8.dp)),
+                .background(Color.White, shape = RoundedCornerShape(8.dp))
+                .focusRequester(focusRequester),
             shape = RoundedCornerShape(8.dp),
             visualTransformation = PasswordVisualTransformation(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -359,17 +376,17 @@ fun DrawPasswordTextField(password: String, onValueChange: (String) -> Unit) {
             ),
             placeholder = { Text(text = "비밀번호 입력", fontSize = 14.sp) },
             keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
             ),
             keyboardActions = KeyboardActions(
-                onDone = { keyboardController?.hide() }
+                onNext = { nextFocusRequester.requestFocus() }
             )
         )
     }
 }
 
 @Composable
-fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) -> Unit) {
+fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) -> Unit, focusRequester: FocusRequester, nextFocusRequester: FocusRequester) {
     val maxLength = 15
     Row(
         modifier = Modifier.padding(12.dp),
@@ -397,10 +414,11 @@ fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) 
             value = passwordConfirm,
             onValueChange = {
                 if (it.contains('\t')) {
-                    keyboardController?.hide()
+                    nextFocusRequester.requestFocus()
                 }
                 if ( it.contains('\n')) {
                     keyboardController?.hide()
+                    nextFocusRequester.requestFocus()
                 } else {
                     if (it.length <= maxLength) {
                         val newText =
@@ -411,7 +429,8 @@ fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) 
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, shape = RoundedCornerShape(8.dp)),
+                .background(Color.White, shape = RoundedCornerShape(8.dp))
+                .focusRequester(focusRequester),
             shape = RoundedCornerShape(8.dp),
             visualTransformation = PasswordVisualTransformation(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -422,10 +441,10 @@ fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) 
             ),
             placeholder = { Text(text = "비밀번호 확인", fontSize = 14.sp) },
             keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
             ),
             keyboardActions = KeyboardActions(
-                onDone = { keyboardController?.hide() }
+                onNext = { nextFocusRequester.requestFocus() }
             )
         )
     }
@@ -433,7 +452,7 @@ fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) 
 
 
 @Composable
-fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit) {
+fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit, focusRequester: FocusRequester) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var textState by remember { mutableStateOf(TextFieldValue(birthDate)) }
     val maxLength = 8
@@ -462,11 +481,9 @@ fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit) {
             OutlinedTextField(
                 value = textState,
                 onValueChange = {
-                    if (it.text.contains('\t')) {
+                    if (it.text.contains('\t') || it.text.contains('\n')) {
                         keyboardController?.hide()
-                    }
-                    if (it.text.contains('\n')) {
-                        keyboardController?.hide()
+                        focusRequester.requestFocus()
                     } else {
                         if (it.text.length <= maxLength) {
                             val newText =
@@ -478,7 +495,8 @@ fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit) {
                 },
                 modifier = Modifier
                     .background(Color.White, shape = RoundedCornerShape(8.dp))
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
                 shape = RoundedCornerShape(8.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     backgroundColor = Color.White,
