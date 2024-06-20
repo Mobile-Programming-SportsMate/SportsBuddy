@@ -48,6 +48,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -143,133 +144,165 @@ fun SignUpScreen(navController: NavController, userViewModel: UserViewModel) {
     }
 }
 
-@Composable
-fun CustomTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    showText: String,
-    maxLength: Int = 12
-) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    var textState by remember { mutableStateOf(TextFieldValue(value)) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        OutlinedTextField(
-            value = textState,
-            onValueChange = {
-                if (it.text.contains('\t')) {
-                    keyboardController?.hide()
-                }
-                if ( it.text.contains('\n')) {
-                    keyboardController?.hide()
-                } else {
-                    if (it.text.length <= maxLength) {
-                        val newText =
-                            it.text.filter { char -> char != ' ' && char != '\t' && char != '\n' }
-                        textState = it.copy(text = newText)
-                        onValueChange(newText)
-                    }
-                }
-            },
-            modifier = modifier
-                .background(Color.White, shape = RoundedCornerShape(8.dp))
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Color.White,
-                focusedBorderColor = Color.DarkGray,
-                unfocusedBorderColor = Color.LightGray,
-                cursorColor = Color.DarkGray
-            ),
-            placeholder = { Text(text = showText, fontSize = 14.sp) },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = { keyboardController?.hide() }
-            )
-        )
-        Text(
-            text = "${textState.text.length}/$maxLength",
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = 60.dp)
-        )
-    }
-}
 
 @Composable
 fun DrawIdTextField(id: String, onValueChange: (String) -> Unit, onCheckDuplicate: () -> Unit) {
-    Row(
-        modifier = Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Spacer(modifier = Modifier.width(14.dp))
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "",
-            tint = Color.DarkGray,
-        )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "아이디", fontSize = 20.sp)
-        Spacer(modifier = Modifier.width(14.dp))
-        Text(
-            text = "중복확인",
-            fontSize = 14.sp,
-            color = colorResource(id = R.color.lime50),
-            modifier = Modifier.clickable { onCheckDuplicate() }
-        )
-    }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var textState by remember { mutableStateOf(TextFieldValue(id)) }
+    val maxLength = 12
 
-    CustomTextField(
-        value = id,
-        onValueChange = onValueChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 37.dp)
-            .padding(end = 37.dp)
-            .height(55.dp),
-        showText = "아이디 입력"
-    )
+    Column {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Spacer(modifier = Modifier.width(14.dp))
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "",
+                tint = Color.DarkGray,
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(text = "아이디", fontSize = 20.sp)
+            Spacer(modifier = Modifier.width(14.dp))
+            Text(
+                text = "중복확인",
+                fontSize = 14.sp,
+                color = colorResource(id = R.color.lime50),
+                modifier = Modifier.clickable { onCheckDuplicate() }
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 37.dp, end = 37.dp)
+                .height(55.dp)
+        ) {
+            OutlinedTextField(
+                value = textState,
+                onValueChange = {
+                    if (it.text.contains('\t')) {
+                        keyboardController?.hide()
+                    }
+                    if (it.text.contains('\n')) {
+                        keyboardController?.hide()
+                    } else {
+                        if (it.text.length <= maxLength) {
+                            val newText =
+                                it.text.filter { char -> char != ' ' && char != '\t' && char != '\n' }
+                            textState = it.copy(text = newText)
+                            onValueChange(newText)
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    backgroundColor = Color.White,
+                    focusedBorderColor = Color.DarkGray,
+                    unfocusedBorderColor = Color.LightGray,
+                    cursorColor = Color.DarkGray
+                ),
+                placeholder = { Text(text = "아이디 입력", fontSize = 14.sp) },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { keyboardController?.hide() }
+                )
+            )
+            Text(
+                text = "${textState.text.length}/$maxLength",
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 60.dp)
+            )
+        }
+    }
 }
+
 
 @Composable
 fun DrawNickNameTextField(nickname: String, onValueChange: (String) -> Unit, onCheckDuplicate: () -> Unit) {
-    Row(
-        modifier = Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Spacer(modifier = Modifier.width(14.dp))
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "",
-            tint = Color.DarkGray,
-        )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "닉네임", fontSize = 20.sp)
-        Spacer(modifier = Modifier.width(14.dp))
-        Text(
-            text = "중복확인",
-            fontSize = 14.sp,
-            color = colorResource(id = R.color.lime50),
-            modifier = Modifier.clickable { onCheckDuplicate() }
-        )
-    }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var textState by remember { mutableStateOf(TextFieldValue(nickname)) }
+    val maxLength = 12
 
-    CustomTextField(
-        value = nickname,
-        onValueChange = onValueChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 37.dp)
-            .padding(end = 37.dp)
-            .height(55.dp),
-        showText = "닉네임 입력"
-    )
+    Column {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Spacer(modifier = Modifier.width(14.dp))
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "",
+                tint = Color.DarkGray,
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(text = "닉네임", fontSize = 20.sp)
+            Spacer(modifier = Modifier.width(14.dp))
+            Text(
+                text = "중복확인",
+                fontSize = 14.sp,
+                color = colorResource(id = R.color.lime50),
+                modifier = Modifier.clickable { onCheckDuplicate() }
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 37.dp, end = 37.dp)
+                .height(55.dp)
+        ) {
+            OutlinedTextField(
+                value = textState,
+                onValueChange = {
+                    if (it.text.contains('\t')) {
+                        keyboardController?.hide()
+                    }
+                    if (it.text.contains('\n')) {
+                        keyboardController?.hide()
+                    } else {
+                        if (it.text.length <= maxLength) {
+                            val newText =
+                                it.text.filter { char -> char != ' ' && char != '\t' && char != '\n' }
+                            textState = it.copy(text = newText)
+                            onValueChange(newText)
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    backgroundColor = Color.White,
+                    focusedBorderColor = Color.DarkGray,
+                    unfocusedBorderColor = Color.LightGray,
+                    cursorColor = Color.DarkGray
+                ),
+                placeholder = { Text(text = "닉네임 입력", fontSize = 14.sp) },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { keyboardController?.hide() }
+                )
+            )
+            Text(
+                text = "${textState.text.length}/$maxLength",
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 60.dp)
+            )
+        }
+    }
 }
 
 @Composable
@@ -402,32 +435,77 @@ fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) 
 @Composable
 fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    Row(
-        modifier = Modifier.padding(12.dp),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Spacer(modifier = Modifier.width(14.dp))
-        Icon(
-            imageVector = Icons.Default.Search,
-            contentDescription = "",
-            tint = Color.DarkGray,
-        )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = "생년월일", fontSize = 20.sp)
-    }
+    var textState by remember { mutableStateOf(TextFieldValue(birthDate)) }
+    val maxLength = 8
 
-    CustomTextField(
-        value = birthDate,
-        onValueChange = onValueChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 37.dp)
-            .padding(end = 37.dp)
-            .height(55.dp),
-        showText = "숫자 8자리 입력",
-        maxLength = 8
-    )
+    Column {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Spacer(modifier = Modifier.width(14.dp))
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "",
+                tint = Color.DarkGray,
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(text = "생년월일", fontSize = 20.sp)
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 37.dp, end = 37.dp)
+                .height(55.dp)
+        ) {
+            OutlinedTextField(
+                value = textState,
+                onValueChange = {
+                    if (it.text.contains('\t')) {
+                        keyboardController?.hide()
+                    }
+                    if (it.text.contains('\n')) {
+                        keyboardController?.hide()
+                    } else {
+                        if (it.text.length <= maxLength) {
+                            val newText =
+                                it.text.filter { char -> char != ' ' && char != '\t' && char != '\n' }
+                            textState = it.copy(text = newText)
+                            onValueChange(newText)
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    backgroundColor = Color.White,
+                    focusedBorderColor = Color.DarkGray,
+                    unfocusedBorderColor = Color.LightGray,
+                    cursorColor = Color.DarkGray
+                ),
+                placeholder = { Text(text = "숫자 8자리 입력", fontSize = 14.sp) },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { keyboardController?.hide() }
+                )
+
+            )
+            Text(
+                text = "${textState.text.length}/$maxLength",
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 60.dp)
+            )
+        }
+    }
 }
+
 
 
 @Composable

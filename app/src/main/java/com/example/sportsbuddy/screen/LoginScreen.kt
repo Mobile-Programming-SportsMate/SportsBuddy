@@ -62,8 +62,10 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel) {
     ) {
         Spacer(modifier = Modifier.height(16.dp))
         IdInputFieldWithIcon(user.id, { userViewModel.onIdChange(it) }, idFocusRequester, passwordFocusRequester)
+
         Spacer(modifier = Modifier.height(37.dp))
         PasswordInputFieldWithIcon(user.password, { userViewModel.onPasswordChange(it) }, passwordFocusRequester)
+
         Spacer(modifier = Modifier.height(100.dp))
         LoginButton(user.id, user.password, context, navController, userViewModel)
     }
@@ -89,7 +91,14 @@ fun IdInputFieldWithIcon(value: String, onValueChange: (String) -> Unit, focusRe
 }
 
 @Composable
-fun IdTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifier, showText: String, focusRequester: FocusRequester, nextFocusRequester: FocusRequester) {
+fun IdTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier,
+    showText: String,
+    focusRequester: FocusRequester,
+    nextFocusRequester: FocusRequester
+) {
     var textState by remember { mutableStateOf(TextFieldValue(value)) }
 
     Box(modifier = Modifier.fillMaxWidth()) {
@@ -125,7 +134,11 @@ fun IdTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifi
 
 
 @Composable
-fun PasswordInputFieldWithIcon(value: String, onValueChange: (String) -> Unit, focusRequester: FocusRequester) {
+fun PasswordInputFieldWithIcon(
+    value: String,
+    onValueChange: (String) -> Unit,
+    focusRequester: FocusRequester
+) {
     Column {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -144,7 +157,13 @@ fun PasswordInputFieldWithIcon(value: String, onValueChange: (String) -> Unit, f
 }
 
 @Composable
-fun PasswordTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifier, showText: String, focusRequester: FocusRequester) {
+fun PasswordTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier,
+    showText: String,
+    focusRequester: FocusRequester
+) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var textState by remember { mutableStateOf(TextFieldValue(value)) }
 
@@ -183,7 +202,13 @@ fun PasswordTextField(value: String, onValueChange: (String) -> Unit, modifier: 
 }
 
 @Composable
-fun LoginButton(id: String, password: String, context: Context, navController: NavController, userViewModel: UserViewModel) {
+fun LoginButton(
+    id: String,
+    password: String,
+    context: Context,
+    navController: NavController,
+    userViewModel: UserViewModel
+) {
     Button(
         onClick = {
             userViewModel.signIn(id, password, context, navController)
