@@ -120,7 +120,7 @@ fun PersonalMatchDetailScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    val listA = mutableListOf("김민재","알겠습니다!","2024.06.19")
+                    val listA = mutableListOf(nickname,"알겠습니다!",time)
                     listChatroom.add(listA)
                     navController.navigate("chatScreen")
                 },

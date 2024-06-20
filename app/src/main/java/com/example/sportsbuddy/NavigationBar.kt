@@ -68,7 +68,7 @@ fun NavigationBar(
                 ScreenC(navController, userViewModel)
             }
 
-                        composable("chatScreen") {
+            composable("chatScreen") {
                 ChatScreen(
                     model = ChatUiModel(
                         messages = conversation.value,
@@ -87,7 +87,8 @@ fun NavigationBar(
 //                PersonalMatchDetailScreen(navController, listChatroom)
 //            }
 
-            composable("personalMatchDetail/{nickname}/{title}/{time}/{content}/{sport}/{experience}",
+            composable(
+                "personalMatchDetail/{nickname}/{title}/{time}/{content}/{sport}/{experience}",
                 arguments = listOf(
                     navArgument("nickname") { defaultValue = "" },
                     navArgument("title") { defaultValue = "" },
@@ -95,7 +96,8 @@ fun NavigationBar(
                     navArgument("content") { defaultValue = "" },
                     navArgument("sport") { defaultValue = "" },
                     navArgument("experience") { defaultValue = "" },
-                )) { backStackEntry ->
+                )
+            ) { backStackEntry ->
                 PersonalMatchDetailScreen(
                     navController,
                     listChatroom,
@@ -112,7 +114,8 @@ fun NavigationBar(
 //                TeamMatchDetailScreen(navController,listChatroom)
 //            }
 
-            composable("teamMatchDetail/{nickname}/{title}/{time}/{content}/{sport}/{experience}",
+            composable(
+                "teamMatchDetail/{nickname}/{title}/{time}/{content}/{sport}/{experience}",
                 arguments = listOf(
                     navArgument("nickname") { defaultValue = "" },
                     navArgument("title") { defaultValue = "" },
@@ -120,7 +123,8 @@ fun NavigationBar(
                     navArgument("content") { defaultValue = "" },
                     navArgument("sport") { defaultValue = "" },
                     navArgument("experience") { defaultValue = "" },
-                )) { backStackEntry ->
+                )
+            ) { backStackEntry ->
                 TeamMatchDetailScreen(
                     navController,
                     listChatroom,
