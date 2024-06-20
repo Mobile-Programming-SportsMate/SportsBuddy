@@ -66,7 +66,7 @@ fun TeamMatchDetailScreen(
             )
             Spacer(modifier = Modifier.weight(1f))
             androidx.compose.material.Text(
-                text = "개인 매칭",
+                text = "팀 매칭",
                 fontSize = 18.sp,
                 modifier = Modifier.align(Alignment.CenterVertically)
             )

@@ -80,7 +80,7 @@ fun ScreenB(navController: NavController) {
                 contentAlignment = Alignment.BottomEnd,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(end = 16.dp, bottom = 70.dp) // Adjust bottom padding to ensure FAB is above BottomNavigation
+                    .padding(end = 16.dp, bottom = 70.dp)
             ) {
                 FloatingActionButton(
                     onClick = { expanded = true },
