@@ -121,7 +121,7 @@ fun SignUpScreen(navController: NavController, userViewModel: UserViewModel) {
 
             Spacer(modifier = Modifier.height(37.dp))
 
-            DrawBirthTextField(user.birthDate, { userViewModel.onBirthDateChange(it) }, focusRequester = birthDateFocusRequester)
+            DrawBirthTextField(user.birthDate, { userViewModel.onBirthDateChange(it) }, focusRequester = birthDateFocusRequester, focusManager = focusManager)
 
             Spacer(modifier = Modifier.height(37.dp))
 
@@ -452,7 +452,7 @@ fun DrawPasswordCheckTextField(passwordConfirm: String, onValueChange: (String) 
 
 
 @Composable
-fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit, focusRequester: FocusRequester) {
+fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit, focusRequester: FocusRequester, focusManager: FocusManager) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var textState by remember { mutableStateOf(TextFieldValue(birthDate)) }
     val maxLength = 8
@@ -510,7 +510,10 @@ fun DrawBirthTextField(birthDate: String, onValueChange: (String) -> Unit, focus
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
-                    onDone = { keyboardController?.hide() }
+                    onDone = {
+                        keyboardController?.hide()
+                        focusManager.clearFocus()
+                    }
                 )
 
             )
