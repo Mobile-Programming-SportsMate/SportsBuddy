@@ -16,13 +16,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Search
@@ -39,7 +43,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -155,6 +162,55 @@ fun EditText_NickNameTextField(nickname: String, onValueChange: (String) -> Unit
             .height(55.dp),
         showText = nickname
     )
+}
+@Composable
+fun CustomTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    showText: String,
+    maxLength: Int = 12
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var textState by remember { mutableStateOf(TextFieldValue(value)) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        OutlinedTextField(
+            value = textState,
+            onValueChange = {
+                if (it.text.length <= maxLength) {
+                    textState = it
+                    onValueChange(it.text)
+                }
+            },
+            modifier = modifier
+                .background(Color.White, shape = RoundedCornerShape(8.dp))
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(8.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                backgroundColor = Color.White,
+                focusedBorderColor = Color.DarkGray,
+                unfocusedBorderColor = Color.LightGray,
+                cursorColor = Color.DarkGray
+            ),
+            placeholder = { Text(text = showText, fontSize = 14.sp) },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { keyboardController?.hide() }
+            )
+        )
+        Text(
+            text = "${textState.text.length}/$maxLength",
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 60.dp)
+        )
+    }
 }
 
 
