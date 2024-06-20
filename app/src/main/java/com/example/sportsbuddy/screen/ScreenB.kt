@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
@@ -25,7 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -46,16 +46,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sportsbuddy.R
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenB(navController: NavController,) {
+fun ScreenB(navController: NavController) {
     var selectedTab by remember { mutableStateOf(0) }
     val context = LocalContext.current
 
     var expanded by remember { mutableStateOf(false) }
     var selectedOption by remember { mutableStateOf("Select") }
+
     Scaffold(
         topBar = {
             Box(
@@ -78,7 +81,7 @@ fun ScreenB(navController: NavController,) {
                 contentAlignment = Alignment.BottomEnd,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(end = 16.dp, bottom = 70.dp) // Adjust bottom padding to ensure FAB is above BottomNavigation
+                    .padding(end = 16.dp, bottom = 70.dp)
             ) {
                 FloatingActionButton(
                     onClick = { expanded = true },
@@ -168,34 +171,80 @@ fun ScreenB(navController: NavController,) {
 
 @Composable
 fun PersonalMatchList(navController: NavController) {
+    var matchList by remember { mutableStateOf(listOf<MatchData>()) }
+
+    val database = FirebaseDatabase.getInstance()
+    val matchesRef = database.getReference("matches")
+
+    matchesRef.addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val list = mutableListOf<MatchData>()
+            for (dataSnapshot in snapshot.children) {
+                val match = dataSnapshot.getValue(MatchData::class.java)
+                match?.let {
+                    if (it.type == "personal") {
+                        list.add(0, it)
+                    }
+                }
+            }
+            matchList = list
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+
+        }
+    })
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(bottom = 70.dp)
     ) {
-        items(20) { index ->
-            MatchItem(navController, "personal")
+        items(matchList) { match ->
+            MatchItem(navController, "personal", match)
         }
     }
 }
 
 @Composable
 fun TeamMatchList(navController: NavController) {
+    var matchList by remember { mutableStateOf(listOf<MatchData>()) }
+
+    val database = FirebaseDatabase.getInstance()
+    val matchesRef = database.getReference("matches")
+
+    matchesRef.addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val list = mutableListOf<MatchData>()
+            for (dataSnapshot in snapshot.children) {
+                val match = dataSnapshot.getValue(MatchData::class.java)
+                match?.let {
+                    if (it.type == "team") {
+                        list.add(0, it)
+                    }
+                }
+            }
+            matchList = list
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+
+        }
+    })
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(bottom = 70.dp)
     ) {
-        items(20) { index ->
-            MatchItem(navController, "team")
+        items(matchList) { match ->
+            MatchItem(navController, "team", match)
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MatchItem(navController: NavController, matchType: String) {
-
+fun MatchItem(navController: NavController, matchType: String, match: MatchData) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -207,8 +256,12 @@ fun MatchItem(navController: NavController, matchType: String) {
                 .padding(horizontal = 8.dp, vertical = 4.dp)
                 .clickable {
                     when (matchType) {
-                        "personal" -> navController.navigate("personalMatchDetail")
-                        "team" -> navController.navigate("teamMatchDetail")
+                        "personal" -> navController.navigate(
+                            "personalMatchDetail/${match.nickname}/${match.title}/${match.time}/${match.content}/${match.sport}/${match.experience}"
+                        )
+                        "team" -> navController.navigate(
+                            "teamMatchDetail/${match.nickname}/${match.title}/${match.time}/${match.content}/${match.sport}/${match.experience}"
+                        )
                     }
                 },
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -231,23 +284,24 @@ fun MatchItem(navController: NavController, matchType: String) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "닉네임",
+                        text = match.nickname,
                         fontSize = 14.sp,
                         color = Color.Gray
                     )
                     Text(
-                        text = "제목제목제목제목...",
+                        text = match.title,
                         fontSize = 16.sp,
                         color = Color.Black
                     )
                     Text(
-                        text = "글 내용 글 내용 사이즈 넘어가면...",
-                        fontSize = 14.sp, color = Color.Gray,
+                        text = match.content,
+                        fontSize = 14.sp,
+                        color = Color.Gray,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1
                     )
                     Text(
-                        text = "2024.05.20",
+                        text = match.current,
                         fontSize = 12.sp,
                         color = Color.Gray,
                         maxLines = 1

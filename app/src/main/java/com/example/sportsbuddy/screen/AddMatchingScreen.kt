@@ -5,8 +5,6 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -43,6 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.sportsbuddy.UserViewModel
+import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import com.example.sportsbuddy.data.City
 import com.example.sportsbuddy.data.District
 import com.example.sportsbuddy.data.Neighborhood
@@ -50,14 +52,13 @@ import com.example.sportsbuddy.data.cities
 
 
 @Composable
-fun AddMatchingScreen(
-    navController: NavHostController,
-    isTeamMatching: Boolean,
-    userViewModel: UserViewModel
-) {
+fun AddMatchingScreen(navController: NavHostController, isTeamMatching: Boolean, userViewModel: UserViewModel) {
     var title by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
+    var sport by remember { mutableStateOf("") }
+    var experience by remember { mutableStateOf("") }
+
     val focusManager = LocalFocusManager.current
 
     val context = LocalContext.current
@@ -71,7 +72,8 @@ fun AddMatchingScreen(
 
     var expandedRecruit by remember { mutableStateOf(false) }
 
-
+    val user by userViewModel.user.collectAsState()
+    val nickname = user.nickname
 
     Column(
         modifier = Modifier
@@ -96,7 +98,19 @@ fun AddMatchingScreen(
             Spacer(modifier = Modifier.weight(1f))
             Text(text = "매치 글 작성", fontSize = 18.sp, modifier = Modifier.padding(start = 12.dp))
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = "저장", modifier = Modifier.clickable { userViewModel.addMatchingPost(navController, context ) })
+            Text(
+                text = "저장",
+                modifier = Modifier.clickable {
+//                    userViewModel.addMatchingPost(navController, context )
+                    val currentTime = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(Date())
+                    val matchData = MatchData(
+                        nickname, title, time, content, currentTime, sport, experience,
+                        if (isTeamMatching) "team" else "personal"
+                    )
+                    saveMatchData(matchData)
+                    navController.popBackStack()
+                }
+            )
         }
 
         Divider(
@@ -116,7 +130,8 @@ fun AddMatchingScreen(
         TextField(
             value = title,
             onValueChange = { title = it
-                            userViewModel.onMatchingPostTitleChange(it)},
+//                            userViewModel.onMatchingPostTitleChange(it)
+                            },
             placeholder = { Text("제목을 입력하세요") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -140,8 +155,7 @@ fun AddMatchingScreen(
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        DrawSportsDropdown(userViewModel)
-
+        DrawSportsDropdown(selectedSport = { sport = it }, selectedExperience = { experience = it })
 
         Spacer(modifier = Modifier.height(20.dp))
         Divider(
@@ -176,7 +190,8 @@ fun AddMatchingScreen(
                                     expandedRecruit = true
                                 }
                         )
-                        // Dropdown icon
+
+                        // 드롭다운 아이콘
                         Icon(
                             imageVector = Icons.Default.ArrowDropDown,
                             contentDescription = "Dropdown",
@@ -187,18 +202,18 @@ fun AddMatchingScreen(
                         )
                     }
 
-                    // Dropdown menu
+                    // 드롭다운 메뉴
                     DropdownMenu(
                         expanded = expandedRecruit,
                         onDismissRequest = { expandedRecruit = false }
                     ) {
-                        // Each item in the menu
+                        // 각 항목에 대한 아이템
                         recruitNumbers.forEach { item ->
                             DropdownMenuItem(
                                 onClick = {
                                     selectedRecruitNumberItem = item
                                     expandedRecruit = false
-                                    userViewModel.onMatchingPostPeopleChange(item)
+//                                    userViewModel.onMatchingPostPeopleChange(item)
                                 }
                             ) {
                                 Text(text = item)
@@ -227,7 +242,7 @@ fun AddMatchingScreen(
             Text(text = "동네 입력", fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
         }
 
-        DrawEditLocation3(userViewModel)
+        DrawEditLocation()
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -240,8 +255,7 @@ fun AddMatchingScreen(
         }
         TextField(
             value = time,
-            onValueChange = { time = it
-                userViewModel.onMatchingPostTimeChange(it)},
+            onValueChange = { time = it },
             placeholder = { Text("원하는 시간대를 입력해주세요") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -266,7 +280,8 @@ fun AddMatchingScreen(
         TextField(
             value = content,
             onValueChange = { content = it
-                userViewModel.onMatchingPostDetailChange(it)},
+//                userViewModel.onMatchingPostDetailChange(it)
+                            },
             placeholder = { Text("내용을 입력하세요") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -289,16 +304,18 @@ fun DrawSportsDropdown(userViewModel: UserViewModel) {
     var selectedSportsMenuItem by remember { mutableStateOf("종목을 선택하세요") }
     var selectedExperienceMenuItem by remember { mutableStateOf("구력을 선택하세요") }
 
-    // Drddown menu states
+    // 드롭다운 메뉴가 열려 있는지 여부를 저장할 MutableState
     var expandedSports by remember { mutableStateOf(false) }
     var expandedExperience by remember { mutableStateOf(false) }
+
+
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 18.dp)
     ) {
-        // Sports selection dropdown
+        // 선택된 항목을 보여주는 텍스트
         Column {
             Row {
                 Text(
@@ -309,6 +326,8 @@ fun DrawSportsDropdown(userViewModel: UserViewModel) {
                             expandedSports = true
                         }
                 )
+
+                // 드롭다운 아이콘
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
                     contentDescription = "Dropdown",
@@ -320,15 +339,19 @@ fun DrawSportsDropdown(userViewModel: UserViewModel) {
                     tint = Color.Black
                 )
             }
+
+            // 드롭다운 메뉴
             DropdownMenu(
                 expanded = expandedSports,
                 onDismissRequest = { expandedSports = false }
             ) {
+                // 각 항목에 대한 아이템
                 listOf("축구", "야구", "농구", "헬스", "런닝", "볼링").forEach { item ->
                     DropdownMenuItem(onClick = {
                         selectedSportsMenuItem = item
                         expandedSports = false
-                        userViewModel.onMatchingPostSportChange(item)
+//                        userViewModel.onMatchingPostSportChange(item)
+                        selectedSport(item)
                     }) {
                         Text(text = item)
                     }
@@ -349,26 +372,30 @@ fun DrawSportsDropdown(userViewModel: UserViewModel) {
                             expandedExperience = true
                         }
                 )
+
+                // 드롭다운 아이콘
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
                     contentDescription = "Dropdown",
                     modifier = Modifier
                         .padding(end = 16.dp)
-                        .clickable {
-                            expandedExperience = true
-                        },
+                        .clickable { expandedExperience = true },
                     tint = Color.Black
                 )
             }
+
+            // 드롭다운 메뉴
             DropdownMenu(
                 expanded = expandedExperience,
                 onDismissRequest = { expandedExperience = false }
             ) {
+                // 각 항목에 대한 아이템
                 listOf("무경험", "1년이하", "1년~3년", "3년~5년", "5년~10년", "10년 이상").forEach { item ->
                     DropdownMenuItem(onClick = {
                         selectedExperienceMenuItem = item
                         expandedExperience = false
-                        userViewModel.onMatchingPostCareerChange(item)
+//                        userViewModel.onMatchingPostCareerChange(item)
+                        selectedExperience(item)
                     }) {
                         Text(text = item)
                     }
@@ -377,6 +404,24 @@ fun DrawSportsDropdown(userViewModel: UserViewModel) {
         }
     }
 }
+
+private fun saveMatchData(matchData: MatchData) {
+    val database = FirebaseDatabase.getInstance()
+    val matchesRef = database.getReference("matches")
+
+    matchesRef.push().setValue(matchData)
+}
+
+data class MatchData(
+    val nickname: String = "",
+    val title: String = "",
+    val time: String = "",
+    val content: String = "",
+    val current: String = "",
+    val sport: String = "",
+    val experience: String = "",
+    val type: String = ""
+)
 
 
 
