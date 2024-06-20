@@ -20,8 +20,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,14 +29,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.sportsbuddy.UserViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PersonalMatchDetailScreen(
     navController: NavController,
     listChatroom: MutableList<List<String>>,
-    userViewModel: UserViewModel,
+    nickname: String,
     title: String,
     time: String,
     content: String,
@@ -46,7 +43,6 @@ fun PersonalMatchDetailScreen(
     experience: String
 ) {
     val focusManager = LocalFocusManager.current
-    val user by userViewModel.user.collectAsState()
 
     Column(
         modifier = Modifier
@@ -107,7 +103,7 @@ fun PersonalMatchDetailScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
             Column {
-                Text(text = user.nickname, fontSize = 14.sp, color = Color.Gray)
+                Text(text = nickname, fontSize = 14.sp, color = Color.Gray)
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(text = "운동 시간대 : $time", fontSize = 14.sp, color = Color.Gray)
                 Spacer(modifier = Modifier.height(4.dp))

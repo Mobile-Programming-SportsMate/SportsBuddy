@@ -87,8 +87,9 @@ fun NavigationBar(
 //                PersonalMatchDetailScreen(navController, listChatroom)
 //            }
 
-            composable("personalMatchDetail/{title}/{time}/{content}/{sport}/{experience}",
+            composable("personalMatchDetail/{nickname}/{title}/{time}/{content}/{sport}/{experience}",
                 arguments = listOf(
+                    navArgument("nickname") { defaultValue = "" },
                     navArgument("title") { defaultValue = "" },
                     navArgument("time") { defaultValue = "" },
                     navArgument("content") { defaultValue = "" },
@@ -98,7 +99,7 @@ fun NavigationBar(
                 PersonalMatchDetailScreen(
                     navController,
                     listChatroom,
-                    userViewModel,
+                    backStackEntry.arguments?.getString("nickname") ?: "",
                     backStackEntry.arguments?.getString("title") ?: "",
                     backStackEntry.arguments?.getString("time") ?: "",
                     backStackEntry.arguments?.getString("content") ?: "",
@@ -111,8 +112,9 @@ fun NavigationBar(
 //                TeamMatchDetailScreen(navController,listChatroom)
 //            }
 
-            composable("teamMatchDetail/{title}/{time}/{content}/{sport}/{experience}",
+            composable("teamMatchDetail/{nickname}/{title}/{time}/{content}/{sport}/{experience}",
                 arguments = listOf(
+                    navArgument("nickname") { defaultValue = "" },
                     navArgument("title") { defaultValue = "" },
                     navArgument("time") { defaultValue = "" },
                     navArgument("content") { defaultValue = "" },
@@ -122,7 +124,7 @@ fun NavigationBar(
                 TeamMatchDetailScreen(
                     navController,
                     listChatroom,
-                    userViewModel,
+                    backStackEntry.arguments?.getString("nickname") ?: "",
                     backStackEntry.arguments?.getString("title") ?: "",
                     backStackEntry.arguments?.getString("time") ?: "",
                     backStackEntry.arguments?.getString("content") ?: "",

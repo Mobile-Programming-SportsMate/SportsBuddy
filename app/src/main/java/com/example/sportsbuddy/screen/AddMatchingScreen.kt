@@ -142,8 +142,6 @@ fun AddMatchingScreen(navController: NavHostController, isTeamMatching: Boolean,
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-//        DrawSportsDropdown()
-
         DrawSportsDropdown(selectedSport = { sport = it }, selectedExperience = { experience = it })
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -175,7 +173,6 @@ fun AddMatchingScreen(navController: NavHostController, isTeamMatching: Boolean,
                             text = selectedRecruitNumberItem ?: "인원 수",
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
-
                         // 드롭다운 아이콘
                         Icon(
                             imageVector = Icons.Default.ArrowDropDown,
@@ -337,9 +334,6 @@ fun DrawSportsDropdown(selectedSport: (String) -> Unit, selectedExperience: (Str
                 }
             }
         }
-
-
-
 
         Column {
             Row {

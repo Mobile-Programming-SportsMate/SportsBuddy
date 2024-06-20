@@ -51,7 +51,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-
 @Composable
 fun ScreenB(navController: NavController) {
     var selectedTab by remember { mutableStateOf(0) }
@@ -181,7 +180,7 @@ fun PersonalMatchList(navController: NavController) {
                 val match = dataSnapshot.getValue(MatchData::class.java)
                 match?.let {
                     if (it.type == "personal") {
-                        list.add(it)
+                        list.add(0, it)
                     }
                 }
             }
@@ -218,7 +217,7 @@ fun TeamMatchList(navController: NavController) {
                 val match = dataSnapshot.getValue(MatchData::class.java)
                 match?.let {
                     if (it.type == "team") {
-                        list.add(it)
+                        list.add(0, it)
                     }
                 }
             }
@@ -255,10 +254,10 @@ fun MatchItem(navController: NavController, matchType: String, match: MatchData)
                 .clickable {
                     when (matchType) {
                         "personal" -> navController.navigate(
-                            "personalMatchDetail/${match.title}/${match.time}/${match.content}/${match.sport}/${match.experience}"
+                            "personalMatchDetail/${match.nickname}/${match.title}/${match.time}/${match.content}/${match.sport}/${match.experience}"
                         )
                         "team" -> navController.navigate(
-                            "personalMatchDetail/${match.title}/${match.time}/${match.content}/${match.sport}/${match.experience}"
+                            "personalMatchDetail/${match.nickname}/${match.title}/${match.time}/${match.content}/${match.sport}/${match.experience}"
                         )
                     }
                 },
