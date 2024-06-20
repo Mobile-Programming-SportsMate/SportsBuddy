@@ -8,6 +8,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.foundation/foundation-layout-android/1.7.0-beta01/c613b6249cd1f8511fb3dab20572d9e539376f20/foundation-layout-android-1.7.0-beta01-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.foundation/foundation-layout-android/1.7.0-beta01/c30fcc13ba6e6f10f524c3e5b3fee1f92ead2616/foundation-layout-1.7.0-beta01-samples-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

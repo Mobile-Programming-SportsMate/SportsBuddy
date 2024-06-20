@@ -8,6 +8,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.material/material-android/1.7.0-beta01/d4ce2a1811e73d3e93658f38414724ac2baef321/material-android-1.7.0-beta01-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.material/material-android/1.7.0-beta01/18d93666ea0acbae4336d9e4209eb6cdbe6e1012/material-1.7.0-beta01-samples-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

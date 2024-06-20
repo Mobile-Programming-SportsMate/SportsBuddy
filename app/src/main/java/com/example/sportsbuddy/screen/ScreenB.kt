@@ -257,7 +257,7 @@ fun MatchItem(navController: NavController, matchType: String, match: MatchData)
                 .clickable {
                     when (matchType) {
                         "personal" -> navController.navigate(
-                            "personalMatchDetail/${match.nickname}/${match.title}/${match.time}/${match.content}/${match.sport}/${match.experience}"
+                            "teamMatchDetail/${match.nickname}/${match.title}/${match.time}/${match.content}/${match.sport}/${match.experience}"
                         )
                         "team" -> navController.navigate(
                             "teamMatchDetail/${match.nickname}/${match.title}/${match.time}/${match.content}/${match.sport}/${match.experience}"

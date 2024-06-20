@@ -11,6 +11,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.ui/ui-android/1.7.0-beta01/c84de0c078c06bacb30cfe79e627165643d94f79/ui-android-1.7.0-beta01-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.compose.ui/ui-android/1.7.0-beta01/3b9e021dca187c14d6bfd9c99a19afdef1ac9dc6/ui-1.7.0-beta01-samples-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
